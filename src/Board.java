@@ -33,16 +33,18 @@ public class Board {
     public static void printBoard() {
         int coor = 0;
         int index1 = 0;
-        int index2 = 10;
-        int offsetCount = 11;
+        int index2 = BOARD_SIZE-1;
+        int index3 = 0;
+        int offsetCount = BOARD_SIZE;
 
 
 
         System.out.println("This is your Hex board: ");
         System.out.println();
 
-        for (int n = 0; n < offsetCount - 1; n++) {
-            System.out.print(OFFSET_THREE);
+        offsetBoard();
+        for (int n = 0; n <= BOARD_SIZE; n++) {
+            System.out.print(OFFSET_TWO);
         }
 
         System.out.print(coor + OFFSET_THREE + coor);
@@ -50,9 +52,8 @@ public class Board {
 
         coor++;
 
-        while (index1 <= index2 -1) {
-            System.out.print(OFFSET_THREE + OFFSET_THREE);
-
+        while (index1 <= index2 - 1) {
+            offsetBoard();
 
             for (int j = 0; j < offsetCount; j++) {
                 System.out.print(OFFSET_TWO);
@@ -65,7 +66,6 @@ public class Board {
             }
 
 
-
             for (int i = 0; i <= index1; i++) {
                 if (i < 10) {
                     System.out.print(board[index1-i][i] + OFFSET_THREE);
@@ -74,9 +74,7 @@ public class Board {
                 }
             }
 
-
             System.out.print(coor);
-
             System.out.println();
 
             coor++;
@@ -84,22 +82,23 @@ public class Board {
             offsetCount--;
         }
 
-        offsetCount+=2;
+
+        offsetCount++;
 
         while(index1 >= 0) {
-            System.out.print(OFFSET_THREE + OFFSET_THREE);
+            offsetBoard();
 
-
-            for (int m = 0; m < offsetCount; m++) {
+            for (int m = 0; m <= offsetCount; m++) {
                 System.out.print(OFFSET_TWO);
             }
 
             for (int k = 0; k <= index1; k++) {
-                System.out.print(board[index2 - k][k] + OFFSET_THREE);
+                System.out.print(board[index2 - k][index3 + k] + OFFSET_THREE);
             }
             System.out.println();
 
             index1--;
+            index3++;
             offsetCount++;
         }
 
@@ -111,7 +110,8 @@ public class Board {
             if (Game.blueTurn) {
                 board[coor[0]][coor[1]] = BLUE;
                 Game.blueTurn = false;
-            } else {
+            } else  if (!Game.blueTurn) {
+                System.out.println(coor[0] + coor[1]);
                 board[coor[0]][coor[1]] = RED;
                 Game.blueTurn = true;
             }
@@ -120,4 +120,7 @@ public class Board {
         }
     }
 
+    public static void offsetBoard() {
+        System.out.print(OFFSET_THREE + OFFSET_THREE);
+    }
 }
