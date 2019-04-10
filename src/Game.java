@@ -16,7 +16,6 @@ public class Game {
             if (blueTurn) {
                 blueMove();
             } else {
-                System.out.println("red turn");
                 redMove();
             }
         }
