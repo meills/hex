@@ -1,7 +1,5 @@
 public class Hex {
     public static void main(String[] args) {
-        Board board = new Board();
-
-        board.printBoard();
+        Game game = new Game();
     }
 }
