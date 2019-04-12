@@ -18,6 +18,7 @@ public class Game {
             } else {
                 redMove();
             }
+            gameComplete = Board.isGameComplete();
         }
     }
 

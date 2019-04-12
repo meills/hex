@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Board {
     private static final char FREE = '#';
     private static final char RED = 'r';
@@ -7,7 +9,7 @@ public class Board {
     private static final String OFFSET_TWO = "  ";
     private static final String OFFSET_THREE = "   ";
 
-    private static final int BOARD_SIZE = 11;
+    private static final int BOARD_SIZE = 4;
 
 
     private static char[][] board;
@@ -22,13 +24,13 @@ public class Board {
         }
     }
 
-    public static void debugBoard() {
+    /*public static void debugBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; i < BOARD_SIZE; j++) {
                 System.out.println(board[i][j]);
             }
         }
-    }
+    }*/
 
     public static void printBoard() {
         int coor = 0;
@@ -36,8 +38,6 @@ public class Board {
         int index2 = BOARD_SIZE-1;
         int index3 = 0;
         int offsetCount = BOARD_SIZE;
-
-
 
         System.out.println("This is your Hex board: ");
         System.out.println();
@@ -82,7 +82,6 @@ public class Board {
             offsetCount--;
         }
 
-
         offsetCount++;
 
         while(index1 >= 0) {
@@ -119,6 +118,43 @@ public class Board {
             System.out.println("Invalid move! Hex tile is already occupied.");
         }
     }
+
+
+    public static boolean isGameComplete() {
+        boolean gameComplete = false;
+
+        Set<int[]> blueCoor = new HashSet<>();
+        Set<int[]> redCoor = new HashSet<>();
+
+        int[] coor = new int[2];
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                switch (board[i][j]) {
+                    case 'b':
+                        coor[0] = i;
+                        coor[1] = j;
+                        blueCoor.add(coor);
+                        break;
+                    case 'r':
+                        coor[0] = i;
+                        coor[1] = j;
+                        redCoor.add(coor);
+                        break;
+
+                }
+            }
+        }
+
+
+
+        return gameComplete;
+    }
+
+    public static void checkCoor() {
+
+    }
+
 
     public static void offsetBoard() {
         System.out.print(OFFSET_THREE + OFFSET_THREE);
