@@ -1,16 +1,14 @@
-package network;
-
 import java.io.*;
 import java.net.*;
 
 public class Client {
 
-    Socket clientSocket;
-    String hostName;
-    int portNumber;
-    BufferedReader in;
-    BufferedReader stdIn;
-    PrintWriter out;
+    public static Socket clientSocket;
+    public static String hostName;
+    public static int portNumber;
+    public static BufferedReader in;
+    public static BufferedReader stdIn;
+    public static PrintWriter out;
 
     /**
      * Constructor for the client.
@@ -32,7 +30,7 @@ public class Client {
             System.out.println("\n Lost connection with the server.");
 
             try {
-                cientSocket.close();
+                clientSocket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -40,6 +38,12 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void clientMove() {
+        Game.makeMove();
+        out.println(Board.move);
+        System.out.println(Board.move);
     }
 
     public void connect() throws NullPointerException {
@@ -59,9 +63,27 @@ public class Client {
              */
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+            /**
+             * Starts communication with the server.
+             */
+            out.println("hello");
+            System.out.println("Client: hello");
+
+            /**
+             * Checks that the server is using the same protocols.
+             */
             if (in.readLine().equals("hello")) {
-                System.out.println("Server says hello");
-                out.println("hello");
+                System.out.println("Server: hello");
+
+                /**
+                 * Requests a new game. Server can respond "ready" or "reject".
+                 */
+                out.println("newgame");
+                System.out.println("Client: newgame");
+
+                if (in.readLine().equals("ready")) {
+                    System.out.println("Server: ready");
+                }
             }
 
         } catch (ConnectException e) {
@@ -74,6 +96,7 @@ public class Client {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

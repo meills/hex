@@ -1,5 +1,3 @@
-package network;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -12,6 +10,10 @@ public class Main {
      * The hostName is the computer used by the player.
      */
     static String hostName;
+
+    /**
+     * Port number needs to be between 1025-65535.
+     */
     static int portNumber = 9898;
 
     public static void main(String[] args) {
@@ -79,7 +81,7 @@ public class Main {
 
             try {
                 String ipAddress = getIPAddress();
-                Client client = new Client(ipAdress, portNumber);
+                Client client = new Client(ipAddress, portNumber);
                 client.communicate();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,7 +91,8 @@ public class Main {
 
     /**
      * Gets the IP address of the server (in the case that the player is a client).
-     * @return
+     *
+     * @return - the IP address
      */
     public static String getIPAddress() throws IOException {
 
