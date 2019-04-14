@@ -32,6 +32,9 @@ public class Board {
         }
     }*/
 
+    /**
+     * Prints board
+     */
     public static void printBoard() {
         int coor = 0;
         int index1 = 0;
@@ -104,13 +107,16 @@ public class Board {
         System.out.println();
     }
 
+    /**
+     * Updates board according to specified coordinates.
+     * @param coor - coordinates on hex board
+     */
     public static void updateBoard(int[] coor) {
         if (board[coor[0]][coor[1]] == FREE) {
             if (Game.blueTurn) {
                 board[coor[0]][coor[1]] = BLUE;
                 Game.blueTurn = false;
             } else  if (!Game.blueTurn) {
-                System.out.println(coor[0] + coor[1]);
                 board[coor[0]][coor[1]] = RED;
                 Game.blueTurn = true;
             }
@@ -120,16 +126,22 @@ public class Board {
     }
 
 
+    /**
+     * Method checks if game is complete and returns a boolean value.
+     * @return - boolean value denoting if game is complete
+     */
     public static boolean isGameComplete() {
         boolean gameComplete = false;
 
-        Set<int[]> blueCoor = new HashSet<>();
-        Set<int[]> redCoor = new HashSet<>();
+        ArrayList<int[]> blueCoor = new ArrayList<>();
+        ArrayList<int[]> redCoor = new ArrayList<>();
 
-        int[] coor = new int[2];
+        int[] coor;
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
+                coor = new int[2];
+
                 switch (board[i][j]) {
                     case 'b':
                         coor[0] = i;
@@ -141,19 +153,32 @@ public class Board {
                         coor[1] = j;
                         redCoor.add(coor);
                         break;
-
+                    default:
+                        break;
                 }
             }
         }
 
+        for (int[] cor: blueCoor) {
+            if (cor[1] == 0) {
 
+            }
+        }
+
+        // statements for debugging
+        System.out.println("blue coords:");
+        for (int[] cor: blueCoor) {
+            System.out.println(cor[0] + " " + cor[1]);
+        }
+
+        System.out.println("red coords:");
+        for (int[] co: redCoor) {
+            System.out.println(co[0] + " " + co[1]);
+        }
 
         return gameComplete;
     }
 
-    public static void checkCoor() {
-
-    }
 
 
     public static void offsetBoard() {

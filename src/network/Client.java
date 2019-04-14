@@ -32,7 +32,7 @@ public class Client {
             System.out.println("\n Lost connection with the server.");
 
             try {
-                cientSocket.close();
+                clientSocket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

@@ -35,6 +35,11 @@ public class Game {
             System.out.println("Make your move (enter hex coordinates):");
 
             move = parseCoor(input.nextLine());
+
+            if (move[0] == -1) {
+                break;
+            }
+
             System.out.println();
             Board.updateBoard(move);
         }
@@ -53,6 +58,11 @@ public class Game {
             System.out.println("Make your move (enter hex coordinates):");
 
             move = parseCoor(input.nextLine());
+
+            if (move[0] == -1) {
+                break;
+            }
+
             System.out.println();
             Board.updateBoard(move);
         }
@@ -80,6 +90,8 @@ public class Game {
 
         } else {
             System.out.println("Invalid input! Please enter coordinates in the format '<left coordinate>, <right coordinate>'");
+            coor[0] = -1;
+            coor[1] = -1;
         }
         return coor;
     }
