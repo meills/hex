@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Board {
@@ -9,7 +10,7 @@ public class Board {
     private static final String OFFSET_TWO = "  ";
     private static final String OFFSET_THREE = "   ";
 
-    private static final int BOARD_SIZE = 4;
+    private static final int BOARD_SIZE = 5;
 
 
     private static char[][] board;
@@ -33,72 +34,28 @@ public class Board {
     }*/
 
     public static void printBoard() {
-        int coor = 0;
-        int index1 = 0;
-        int index2 = BOARD_SIZE-1;
-        int index3 = 0;
-        int offsetCount = BOARD_SIZE;
-
-        System.out.println("This is your Hex board: ");
         System.out.println();
 
-        offsetBoard();
-        for (int n = 0; n <= BOARD_SIZE; n++) {
-            System.out.print(OFFSET_TWO);
+        for (int index = 0; index < BOARD_SIZE; index++) {
+            System.out.print(" " + index);
         }
-
-        System.out.print(coor + OFFSET_THREE + coor);
         System.out.println();
 
-        coor++;
+        for (int i = 0; i < BOARD_SIZE; i++) {
 
-        while (index1 <= index2 - 1) {
-            offsetBoard();
-
-            for (int j = 0; j < offsetCount; j++) {
-                System.out.print(OFFSET_TWO);
-            }
-
-            if (coor < 10) {
-                System.out.print(coor + OFFSET_THREE);
-            } else {
-                System.out.print(coor + OFFSET_TWO);
-            }
-
-
-            for (int i = 0; i <= index1; i++) {
-                if (i < 10) {
-                    System.out.print(board[index1-i][i] + OFFSET_THREE);
-                } else {
-                    System.out.print(board[index1-i][i] + OFFSET_TWO);
+            for (int space = 0; space < i; space ++) {
+                if (space < 9) {
+                    System.out.print(OFFSET_ONE);
                 }
             }
 
-            System.out.print(coor);
-            System.out.println();
+            System.out.print(i + OFFSET_ONE);
 
-            coor++;
-            index1++;
-            offsetCount--;
-        }
-
-        offsetCount++;
-
-        while(index1 >= 0) {
-            offsetBoard();
-
-            for (int m = 0; m <= offsetCount; m++) {
-                System.out.print(OFFSET_TWO);
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.print(board[i][j] + OFFSET_ONE);
             }
 
-            for (int k = 0; k <= index1; k++) {
-                System.out.print(board[index2 - k][index3 + k] + OFFSET_THREE);
-            }
             System.out.println();
-
-            index1--;
-            index3++;
-            offsetCount++;
         }
 
         System.out.println();
@@ -123,8 +80,13 @@ public class Board {
     public static boolean isGameComplete() {
         boolean gameComplete = false;
 
-        Set<int[]> blueCoor = new HashSet<>();
-        Set<int[]> redCoor = new HashSet<>();
+        ArrayList<int[]> blueCoor = new ArrayList<>();
+        ArrayList<int[]> redCoor = new ArrayList<>();
+        int[] adjCoor = new HashSet<int[]>;
+
+        // key - first coordinate in coordinate array
+        // value - array list of coordinates
+        HashMap<Integer, ArrayList<int[]>> rows;
 
         int[] coor = new int[2];
 
@@ -146,13 +108,97 @@ public class Board {
             }
         }
 
+        //checks for blue winning
+
+
+
+        rows = new HashMap<>();
+
+        for (int i = 0; i < board.length; i++) {
+            rows.put(i, new ArrayList<>());
+
+            for (int[] bc : blueCoor) {
+                if (bc[0] == i) {
+                    rows.get(i).add(bc);
+                }
+            }
+        }
+
+        for (int i =0; i < board.length; i++) {
+            if (rows.get(i).size() != 0) {
+                for (int[] bc: rows.get(i)) {
+                    if (i > 0) {
+
+                    }
+                    adjCoor = genAdjCoor(bc, BLUE);
+                }
+
+            } else {
+                gameComplete = false;
+            }
+        }
+
 
 
         return gameComplete;
     }
 
-    public static void checkCoor() {
 
+    /**
+     * Generates all coordinates of adjacent hex pieces.
+     * @param coor
+     * @return
+     */
+    public static int[] genAdjCoor(int[] coor, char c) {
+        HashSet<int[]> adjCoors = new HashSet<>();
+
+        int[] adjCoor = new int[2];
+        adjCoor[0] = -1;
+
+        if (coor[0] > 0 && board[coor[0] - 1][coor[1]] != FREE) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0] - 1;
+            adjCoor[1] =  coor[1];
+            adjCoors.add(adjCoor);
+        }
+
+        if (coor[0] > 0 && coor[1] < BOARD_SIZE -1) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0] - 1;
+            adjCoor[1] =  coor[1]+1;
+            adjCoors.add(adjCoor);
+        }
+
+        if (coor[1] < BOARD_SIZE - 1) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0];
+            adjCoor[1] =  coor[1] + 1;
+            adjCoors.add(adjCoor);
+        }
+
+        if (coor[0] < BOARD_SIZE - 1) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0] + 1;
+            adjCoor[1] =  coor[1];
+            adjCoors.add(adjCoor);
+        }
+
+
+        if (coor[0] < BOARD_SIZE - 1 && coor[1] > 0) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0] + 1;
+            adjCoor[1] =  coor[1] - 1;
+            adjCoors.add(adjCoor);
+        }
+
+        if (coor[1] > 0) {
+            adjCoor = new int[2];
+            adjCoor[0] = coor[0];
+            adjCoor[1] =  coor[1] - 1;
+            adjCoors.add(adjCoor);
+        }
+
+        return adjCoor;
     }
 
 
