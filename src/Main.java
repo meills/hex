@@ -14,7 +14,7 @@ public class Main {
     /**
      * Port number needs to be between 1025-65535.
      */
-    static int portNumber = 9898;
+    static int portNumber = 8000;
 
     public static void main(String[] args) {
 

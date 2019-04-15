@@ -40,12 +40,6 @@ public class Client {
         }
     }
 
-    public static void clientMove() {
-        Game.makeMove();
-        out.println(Game.currentCoord);
-        System.out.println(Game.currentCoord);
-    }
-
     public static void connect() throws NullPointerException {
 
         try {
@@ -85,8 +79,20 @@ public class Client {
                     System.out.println("Server: ready");
                 }
 
-                while (!Game.gameComplete) {
-                    clientMove();
+                /**
+                 * Initialises a new game.
+                 */
+                Game.initGame();
+
+                Board.printBoard();
+
+                while (clientSocket.isConnected()) {
+                    String serverMove = in.readLine();
+                    System.out.println("Server: " + serverMove);
+                    Game.makeMove(serverMove);
+                    Game.makeMove();
+                    Board.printBoard();
+                    out.println(Game.currentCoord);
                 }
             }
 

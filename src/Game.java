@@ -13,12 +13,31 @@ public class Game {
         Board.initBoard();
     }
 
+    /**
+     * Used to make the current move for the current player.
+     */
     public static void makeMove() {
         if (!gameComplete) {
             if (blueTurn) {
                 blueMove();
             } else {
                 redMove();
+            }
+            gameComplete = Board.isGameComplete();
+        }
+    }
+
+    /**
+     * Used to update the board based on the opponent's move.
+     *
+     * @param position - the position chosen by the opponent
+     */
+    public static void makeMove(String position) {
+        if (!gameComplete) {
+            if (blueTurn) {
+                blueMove(position);
+            } else {
+                redMove(position);
             }
             gameComplete = Board.isGameComplete();
         }
@@ -33,7 +52,6 @@ public class Game {
         int[] move;
 
         while (blueTurn) {
-            System.out.println("Blue player's turn.");
             Board.printBoard();
             System.out.println("Make your move (enter hex coordinates):");
 
@@ -45,14 +63,32 @@ public class Game {
     }
 
     /**
+     * Used to update opponent's position.
+     *
+     * @param position - the opponent's position
+     */
+    public static void blueMove(String position) {
+
+        int[] move;
+
+        while (blueTurn) {
+
+            currentCoord = position; // for printing in the server and client
+            move = parseCoor(currentCoord);
+            System.out.println();
+            Board.updateBoard(move);
+        }
+    }
+
+    /**
      * Signals red player to make a move.
      */
     public static void redMove() {
+
         Scanner input = new Scanner(System.in);
         int[] move;
 
         while (!blueTurn) {
-            System.out.println("Red player's turn.");
             Board.printBoard();
             System.out.println("Make your move (enter hex coordinates):");
 
@@ -63,8 +99,22 @@ public class Game {
         }
     }
 
-    public static String getMove() {
-        return currentCoord;
+    /**
+     * Used to update opponent's position.
+     *
+     * @param position - the opponent's position
+     */
+    public static void redMove(String position) {
+
+        int[] move;
+
+        while (!blueTurn) {
+
+            currentCoord = position; // for printing in the server and client
+            move = parseCoor(currentCoord);
+            System.out.println();
+            Board.updateBoard(move);
+        }
     }
 
     /**
@@ -84,8 +134,6 @@ public class Game {
         if (input.matches("\\((\\d|[1][0])\\,\\s(\\d|[1][0])\\);")) {
 
             in = input.split(",");
-
-            System.out.println(in);
 
             try {
                 coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));

@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Board {
 
-    private static final char FREE = '#';
+    private static final char FREE = '⬢';
     private static final char RED = 'r';
     private static final char BLUE = 'b';
 
@@ -10,7 +10,7 @@ public class Board {
     private static final String OFFSET_TWO = "  ";
     private static final String OFFSET_THREE = "   ";
 
-    private static final int BOARD_SIZE = 4;
+    private static final int BOARD_SIZE = 11;
 
     private static char[][] board;
 
@@ -33,6 +33,36 @@ public class Board {
     }*/
 
     public static void printBoard() {
+
+        System.out.println();
+
+        for (int index = 0; index < BOARD_SIZE; index++) {
+            System.out.print(" " + index);
+        }
+        System.out.println();
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+
+            for (int space = 0; space < i; space ++) {
+                if (space < 9) {
+                    System.out.print(" ");
+                }
+            }
+
+            System.out.print(i + " ");
+
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+
+            System.out.println();
+        }
+
+        System.out.println();
+    }
+
+    /*
+        public static void printBoard() {
         int coor = 0;
         int index1 = 0;
         int index2 = BOARD_SIZE - 1;
@@ -102,6 +132,7 @@ public class Board {
 
         System.out.println();
     }
+    */
 
     public static void updateBoard(int[] coor) {
 
@@ -113,7 +144,6 @@ public class Board {
                     board[coor[0]][coor[1]] = BLUE;
                     Game.blueTurn = false;
                 } else if (!Game.blueTurn) {
-                    System.out.println(coor[0] + coor[1]);
                     board[coor[0]][coor[1]] = RED;
                     Game.blueTurn = true;
                 }
@@ -138,14 +168,14 @@ public class Board {
 
                 switch (board[i][j]) {
 
-                    case 'b': {
+                    case BLUE: {
                         coor[0] = i;
                         coor[1] = j;
                         blueCoor.add(coor);
                         break;
                     }
 
-                    case 'r': {
+                    case RED: {
                         coor[0] = i;
                         coor[1] = j;
                         redCoor.add(coor);

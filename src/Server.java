@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Server {
 
@@ -19,8 +20,8 @@ public class Server {
     /**
      * Constructir for the server.
      * 
-     * @param hostName - the name that identifies the computer on the network (server name)
-     * @param portNumber - the identifier of the endpoint of the communication
+     * @param name - the name that identifies the computer on the network (server name)
+     * @param number - the identifier of the endpoint of the communication
      */
     public Server(String name, int number) {
         hostName = name;
@@ -79,14 +80,13 @@ public class Server {
 
                         gameInProgress = true;
 
-                        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        // need to adjust it
-                        // to switch between the server and the client at each turn
-                        // right now, the client doesn't do anything, all happens in the server
                         while (!Game.gameComplete) {
                             Game.makeMove();
+                            Board.printBoard();
                             out.println(Game.currentCoord);
-                            System.out.println("Server: " + Game.currentCoord);
+                            String clientMove = in.readLine();
+                            System.out.println("Client: " + clientMove);
+                            Game.makeMove(clientMove);
                         }
 
                         if (Game.gameComplete) {
