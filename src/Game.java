@@ -7,7 +7,7 @@ public class Game {
     public static boolean blueTurn;
     public static boolean gameComplete;
 
-    public Game() {
+    public static void initGame() {
         blueTurn = true;
         gameComplete = false;
         Board.initBoard();
@@ -75,21 +75,27 @@ public class Game {
      */
     public static int[] parseCoor(String input) {
         String[] in;
-        int[] coor = new int[2];
+        int[] coor = {-1,-1};
 
-        if (input.matches("\\d{1,2},\\s*\\d{1,2}")) {
+        /**
+         * Checks that the input has the format:
+         * "(" + number between 0 and 10 + ", " + number between 0 and 10 + ");"
+         */
+        if (input.matches("\\((\\d|[1][0])\\,\\s(\\d|[1][0])\\);")) {
 
             in = input.split(",");
 
+            System.out.println(in);
+
             try {
-                coor[0] = Integer.parseInt(in[0].replaceAll("\\s+", ""));
-                coor[1] = Integer.parseInt(in[1].replaceAll("\\s+", ""));
+                coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
+                coor[1] = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
             } catch (NumberFormatException e) {
                 System.out.println("Invalid coordinates entered! Please ensure coordinates are numeric.");
             }
 
         } else {
-            System.out.println("Invalid input! Please enter coordinates in the format '<left coordinate>, <right coordinate>'");
+            System.out.println("Invalid input! Please enter coordinates in the format '(<left coordinate>, <right coordinate>);'");
         }
 
         return coor;

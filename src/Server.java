@@ -14,7 +14,7 @@ public class Server {
     /**
      * To check whether a new game can be initialised.
      */
-    private boolean gameInProgress = false;
+    private static boolean gameInProgress = false;
 
     /**
      * Constructir for the server.
@@ -22,9 +22,9 @@ public class Server {
      * @param hostName - the name that identifies the computer on the network (server name)
      * @param portNumber - the identifier of the endpoint of the communication
      */
-    public Server(String hostName, int portNumber) {
-        this.hostName = hostName;
-        this.portNumber = portNumber;
+    public Server(String name, int number) {
+        hostName = name;
+        portNumber = number;
     }
 
     /**
@@ -39,13 +39,7 @@ public class Server {
         }
     }
 
-    public static void serverMove() {
-        Game.makeMove();
-        out.println(Board.move);
-        System.out.println(Board.move);
-    }
-
-    public void connect() {
+    public static void connect() {
 
         try {
 
@@ -81,7 +75,7 @@ public class Server {
                         /**
                          * Initialises a new game.
                          */
-                        Game game = new Game();
+                        Game.initGame();
 
                         gameInProgress = true;
 
@@ -89,11 +83,16 @@ public class Server {
                         // need to adjust it
                         // to switch between the server and the client at each turn
                         // right now, the client doesn't do anything, all happens in the server
-                        while (!game.gameComplete) {
-                           serverMove();
-                           if (!game.gameComplete) {
-                               Client.clientMove();
-                           }
+                        while (!Game.gameComplete) {
+                            Game.makeMove();
+                            out.println(Game.currentCoord);
+                            System.out.println("Server: " + Game.currentCoord);
+                        }
+
+                        if (Game.gameComplete) {
+                            out.println("you-win; bye");
+                            System.out.println("you-win; bye");
+                            serverSocket.close();
                         }
                     }
 

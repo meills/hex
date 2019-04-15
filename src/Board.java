@@ -2,8 +2,6 @@ import java.util.*;
 
 public class Board {
 
-    public static String move;
-
     private static final char FREE = '#';
     private static final char RED = 'r';
     private static final char BLUE = 'b';
@@ -107,20 +105,21 @@ public class Board {
 
     public static void updateBoard(int[] coor) {
 
-        if (board[coor[0]][coor[1]] == FREE) {
+        if (coor[0] >= 0 && coor[0]< BOARD_SIZE && coor[1] >= 0 && coor[1]< BOARD_SIZE) {
 
-            move = Game.currentCoord; // to print in the server-client
+            if (board[coor[0]][coor[1]] == FREE) {
 
-            if (Game.blueTurn) {
-                board[coor[0]][coor[1]] = BLUE;
-                Game.blueTurn = false;
-            } else if (!Game.blueTurn) {
-                System.out.println(coor[0] + coor[1]);
-                board[coor[0]][coor[1]] = RED;
-                Game.blueTurn = true;
+                if (Game.blueTurn) {
+                    board[coor[0]][coor[1]] = BLUE;
+                    Game.blueTurn = false;
+                } else if (!Game.blueTurn) {
+                    System.out.println(coor[0] + coor[1]);
+                    board[coor[0]][coor[1]] = RED;
+                    Game.blueTurn = true;
+                }
+            } else {
+                System.out.println("Invalid move! Hex tile is already occupied.");
             }
-        } else {
-            System.out.println("Invalid move! Hex tile is already occupied.");
         }
     }
 

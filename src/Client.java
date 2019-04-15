@@ -13,9 +13,9 @@ public class Client {
     /**
      * Constructor for the client.
      */
-    public Client(String hostName, int portNumber) {
-        this.hostName = hostName;
-        this.portNumber = portNumber;
+    public Client(String name, int number) {
+        hostName = name;
+        portNumber = number;
     }
 
     /**
@@ -42,11 +42,11 @@ public class Client {
 
     public static void clientMove() {
         Game.makeMove();
-        out.println(Board.move);
-        System.out.println(Board.move);
+        out.println(Game.currentCoord);
+        System.out.println(Game.currentCoord);
     }
 
-    public void connect() throws NullPointerException {
+    public static void connect() throws NullPointerException {
 
         try {
 
@@ -83,6 +83,10 @@ public class Client {
 
                 if (in.readLine().equals("ready")) {
                     System.out.println("Server: ready");
+                }
+
+                while (!Game.gameComplete) {
+                    clientMove();
                 }
             }
 
