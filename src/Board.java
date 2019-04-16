@@ -6,14 +6,22 @@ public class Board {
     private static final char RED = 'r';
     private static final char BLUE = 'b';
 
-    private static final String OFFSET_ONE = " ";
-    private static final String OFFSET_TWO = "  ";
-    private static final String OFFSET_THREE = "   ";
+    /**
+     * To change the colour of the terminal output.
+     * 
+     * https://dev.to/awwsmm/coloured-terminal-output-with-java-57l3
+     */
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     private static final int BOARD_SIZE = 11;
 
     private static char[][] board;
 
+    /**
+     * Initialises the board with all positions unoccupied.
+     */
     public static void initBoard() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
 
@@ -32,114 +40,99 @@ public class Board {
         }
     }*/
 
+    /**
+     * Prints the current state of the board.
+     */
     public static void printBoard() {
 
         System.out.println();
 
+        /**
+         * Prints the blue coordinates on top.
+         */
         for (int index = 0; index < BOARD_SIZE; index++) {
-            System.out.print(" " + index);
+            System.out.print(ANSI_BLUE + " " + index);
         }
-        System.out.println();
+        System.out.println(ANSI_RESET);
 
         for (int i = 0; i < BOARD_SIZE; i++) {
 
+            /**
+             * Prints the empty spaces at the beginning of each line.
+             */
             for (int space = 0; space < i; space ++) {
                 if (space < 9) {
                     System.out.print(" ");
                 }
             }
 
-            System.out.print(i + " ");
+            /**
+             * Prints the red coordinates on the left.
+             */
+            System.out.print(ANSI_RED + i + " ");
+            System.out.print(ANSI_RESET);
 
+            /**
+             * Positions are stored as '⬢', 'r', 'b'.
+             * The board is printed as hexagons of different colours.
+             */
             for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(board[i][j] + " ");
-            }
 
-            System.out.println();
-        }
-
-        System.out.println();
-    }
-
-    /*
-        public static void printBoard() {
-        int coor = 0;
-        int index1 = 0;
-        int index2 = BOARD_SIZE - 1;
-        int index3 = 0;
-        int offsetCount = BOARD_SIZE;
-
-        System.out.println("This is your Hex board: ");
-        System.out.println();
-
-        offsetBoard();
-        for (int n = 0; n <= BOARD_SIZE; n++) {
-            System.out.print(OFFSET_TWO);
-        }
-
-        System.out.print(coor + OFFSET_THREE + coor);
-        System.out.println();
-
-        coor++;
-
-        while (index1 <= index2 - 1) {
-            offsetBoard();
-
-            for (int j = 0; j < offsetCount; j++) {
-                System.out.print(OFFSET_TWO);
-            }
-
-            if (coor < 10) {
-                System.out.print(coor + OFFSET_THREE);
-            } else {
-                System.out.print(coor + OFFSET_TWO);
-            }
-
-            for (int i = 0; i <= index1; i++) {
-                if (i < 10) {
-                    System.out.print(board[index1 - i][i] + OFFSET_THREE);
-                } else {
-                    System.out.print(board[index1 - i][i] + OFFSET_TWO);
+                /**
+                 * Prints the red hexagons.
+                 */
+                if (board[i][j] == 'r') {
+                    System.out.print(ANSI_RED + FREE + " ");
+                } 
+                
+                /**
+                 * Prints the blue hexagons.
+                 */
+                else if (board[i][j] == 'b') {
+                    System.out.print(ANSI_BLUE + FREE + " ");
+                } 
+                
+                /**
+                 * Prints the empty spaces.
+                 */
+                else {
+                    System.out.print(ANSI_RESET + FREE + " ");
                 }
             }
 
-            System.out.print(coor);
-            System.out.println();
-
-            coor++;
-            index1++;
-            offsetCount--;
+            /**
+             * Prints the red coordinates on the right.
+             */
+            System.out.println(ANSI_RED + " " + i);
         }
 
-        offsetCount++;
-
-        while (index1 >= 0) {
-            offsetBoard();
-
-            for (int m = 0; m <= offsetCount; m++) {
-                System.out.print(OFFSET_TWO);
-            }
-
-            for (int k = 0; k <= index1; k++) {
-                System.out.print(board[index2 - k][index3 + k] + OFFSET_THREE);
-            }
-            System.out.println();
-
-            index1--;
-            index3++;
-            offsetCount++;
+        /**
+         * Prints the empty spaces and the blue coordinates on the bottom.
+         */
+        System.out.print(String.format("%1$" + (BOARD_SIZE + 1) + "s", ""));
+        for (int index = 0; index < BOARD_SIZE; index++) {
+            System.out.print(ANSI_BLUE + " " + index);
         }
-
-        System.out.println();
+        System.out.println(ANSI_RESET + "\n");
     }
-    */
 
+    /**
+     * Updates the board based on the selected position.
+     * 
+     * @param coor - the coordinates of the position
+     */
     public static void updateBoard(int[] coor) {
 
+        /**
+         * Checks that the coordinates are in range before updating the board.
+         */
         if (coor[0] >= 0 && coor[0]< BOARD_SIZE && coor[1] >= 0 && coor[1]< BOARD_SIZE) {
 
+            /**
+             * Checks that the position is free before updating the board.
+             * Updates the turn if the move is valid.
+             */
             if (board[coor[0]][coor[1]] == FREE) {
-
                 if (Game.blueTurn) {
                     board[coor[0]][coor[1]] = BLUE;
                     Game.blueTurn = false;
@@ -190,9 +183,5 @@ public class Board {
 
     public static void checkCoor() {
 
-    }
-
-    public static void offsetBoard() {
-        System.out.print(OFFSET_THREE + OFFSET_THREE);
     }
 }

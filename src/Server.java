@@ -80,18 +80,44 @@ public class Server {
 
                         gameInProgress = true;
 
-                        while (!Game.gameComplete) {
-                            Game.makeMove();
-                            Board.printBoard();
-                            out.println(Game.currentCoord);
-                            String clientMove = in.readLine();
-                            System.out.println("Client: " + clientMove);
-                            Game.makeMove(clientMove);
+                        String clientMove = in.readLine();
+
+                        /**
+                         * If the server starts first.
+                         */
+                        if (clientMove.equals("pass")) {
+
+                            System.out.println("Client: pass");
+
+                            while (!Game.gameComplete) {
+                                Game.makeMove();
+                                Board.printBoard();
+                                out.println(Game.currentCoord);
+                                clientMove = in.readLine();
+                                System.out.println("Client: " + clientMove);
+                                Game.makeMove(clientMove);
+                            }
                         }
 
+                        /**
+                         * If the client starts first.
+                         */
+                        else {
+
+                            while (!Game.gameComplete) {
+                                System.out.println("Client: " + clientMove);
+                                Game.makeMove(clientMove);
+                                Game.makeMove();
+                                Board.printBoard();
+                                out.println(Game.currentCoord);
+                                clientMove = in.readLine();
+                            }
+                        }
+
+                        // need to change it for both win conditions
                         if (Game.gameComplete) {
                             out.println("you-win; bye");
-                            System.out.println("you-win; bye");
+                            System.out.println("Server: you-win; bye");
                             serverSocket.close();
                         }
                     }

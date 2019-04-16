@@ -7,6 +7,9 @@ public class Game {
     public static boolean blueTurn;
     public static boolean gameComplete;
 
+    /**
+     * Initialises a new game.
+     */
     public static void initGame() {
         blueTurn = true;
         gameComplete = false;

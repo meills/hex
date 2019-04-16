@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 public class Client {
 
@@ -84,15 +85,47 @@ public class Client {
                  */
                 Game.initGame();
 
-                Board.printBoard();
+                Random rand = new Random();
 
-                while (clientSocket.isConnected()) {
-                    String serverMove = in.readLine();
-                    System.out.println("Server: " + serverMove);
-                    Game.makeMove(serverMove);
-                    Game.makeMove();
-                    Board.printBoard();
-                    out.println(Game.currentCoord);
+                int start = rand.nextInt(2);
+
+                /**
+                 * If the server starts first.
+                 */
+                if (start == 0) {
+
+                    out.println("pass");
+                    System.out.println("Client: pass");
+
+                    while (!Game.gameComplete) {
+                        String serverMove = in.readLine();
+                        System.out.println("Server: " + serverMove);
+                        Game.makeMove(serverMove);
+                        Game.makeMove();
+                        Board.printBoard();
+                        out.println(Game.currentCoord);
+                    }
+                }
+
+                /**
+                 * If the client starts first.
+                 */
+                else {
+
+                    while (!Game.gameComplete) {
+                        Game.makeMove();
+                        Board.printBoard();
+                        out.println(Game.currentCoord);
+                        String serverMove = in.readLine();
+                        System.out.println("Server: " + serverMove);
+                        Game.makeMove(serverMove);
+                    }
+                }
+
+                // need to change it for both win conditions
+                if (in.readLine().equals("you-win; bye")) {
+                    System.out.println("Server: you-win; bye");
+                    clientSocket.close();
                 }
             }
 
