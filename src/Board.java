@@ -136,7 +136,7 @@ public class Board {
                 if (Game.blueTurn) {
                     board[coor[0]][coor[1]] = BLUE;
                     Game.blueTurn = false;
-                } else if (!Game.blueTurn) {
+                } else {
                     board[coor[0]][coor[1]] = RED;
                     Game.blueTurn = true;
                 }
@@ -151,37 +151,45 @@ public class Board {
 
         boolean gameComplete = false;
 
-        Set<int[]> blueCoor = new HashSet<>();
-        Set<int[]> redCoor = new HashSet<>();
+        /**
+         * If it is the blue player's turn, we check whether the red player has won
+         * before making a move.
+         */
+        if (Game.blueTurn) {
 
-        int[] coor = new int[2];
+            boolean leftEdge = false;
+            boolean rightEdge = false;
 
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+            /**
+             * Checks that there is at least one red piece on each side.
+             */
+            for (int i = 0; i < BOARD_SIZE; i++) {
 
-                switch (board[i][j]) {
-
-                    case BLUE: {
-                        coor[0] = i;
-                        coor[1] = j;
-                        blueCoor.add(coor);
-                        break;
-                    }
-
-                    case RED: {
-                        coor[0] = i;
-                        coor[1] = j;
-                        redCoor.add(coor);
-                        break;
-                    }
+                if (board[i][0] == 'r') {
+                    leftEdge = true;
                 }
+
+                if (board[i][10] == 'r') {
+                    rightEdge = true;
+                }
+            }
+
+            /**
+             * If there is a red piece on both sides, checks if there is a line connecting the sides.
+             */
+            if (leftEdge && rightEdge) {
+
             }
         }
 
+        /**
+         * If it is the red player's turn, we check whether the blue player has won
+         * before making a move.
+         */
+        else {
+
+        }
+
         return gameComplete;
-    }
-
-    public static void checkCoor() {
-
     }
 }
