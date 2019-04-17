@@ -1,6 +1,8 @@
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Main {
 
@@ -32,7 +34,7 @@ public class Main {
              */
             System.out.println("IP of my system is := " + IP.getHostAddress());
 
-            hostName =IP.getHostAddress();
+            hostName = IP.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -111,7 +113,7 @@ public class Main {
              * Checks that all elements separated by "." are integers.
              * Otherwise, the input is not a valid IP address.
              */
-            for (String element: splitIP) {
+            for (String element : splitIP) {
                 try {
                     Integer.parseInt(element);
                 } catch (NumberFormatException e) {

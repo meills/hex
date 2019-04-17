@@ -90,6 +90,15 @@ public class Server {
                                 System.out.println("Client: " + clientMove);
 
                                 /**
+                                 * If the client quits.
+                                 */
+                                if (clientMove.equals("quit")) {
+                                    clientSocket.close();
+                                    serverSocket.close();
+                                    break;
+                                }
+
+                                /**
                                  * If the server wins.
                                  */
                                 if (clientMove.equals("you-win; bye")) {
@@ -120,6 +129,15 @@ public class Server {
                             while (!Game.gameComplete) {
                                 System.out.println("Client: " + clientMove);
                                 Game.makeMove(clientMove);
+
+                                /**
+                                 * If the client quits.
+                                 */
+                                if (clientMove.equals("quit")) {
+                                    clientSocket.close();
+                                    serverSocket.close();
+                                    break;
+                                }
 
                                 /**
                                  * If the game is complete, the client wins.

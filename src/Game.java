@@ -59,96 +59,106 @@ public class Game {
             System.out.println("Make your move (enter hex coordinates):");
 
             currentCoord = input.nextLine(); // for printing in the server and client
-            move = parseCoor(currentCoord);
-            System.out.println();
-            Board.updateBoard(move);
+
+            if (!currentCoord.equals("quit")) {
+                move = parseCoor(currentCoord);
+                System.out.println();
+                Board.updateBoard(move);
+            } else {
+                blueTurn = false;
+            }
         }
     }
-
-    /**
-     * Used to update opponent's position.
-     *
-     * @param position - the opponent's position
-     */
-    public static void blueMove(String position) {
-
-        int[] move;
-
-        while (blueTurn) {
-
-            currentCoord = position; // for printing in the server and client
-            move = parseCoor(currentCoord);
-            System.out.println();
-            Board.updateBoard(move);
-        }
-    }
-
-    /**
-     * Signals red player to make a move.
-     */
-    public static void redMove() {
-
-        Scanner input = new Scanner(System.in);
-        int[] move;
-
-        while (!blueTurn) {
-            Board.printBoard();
-            System.out.println("Make your move (enter hex coordinates):");
-
-            currentCoord = input.nextLine(); // for printing in the server and client
-            move = parseCoor(currentCoord);
-            System.out.println();
-            Board.updateBoard(move);
-        }
-    }
-
-    /**
-     * Used to update opponent's position.
-     *
-     * @param position - the opponent's position
-     */
-    public static void redMove(String position) {
-
-        int[] move;
-
-        while (!blueTurn) {
-
-            currentCoord = position; // for printing in the server and client
-            move = parseCoor(currentCoord);
-            System.out.println();
-            Board.updateBoard(move);
-        }
-    }
-
-    /**
-     * Parses user input into an int array so that the program can update the board accordingly.
-     *
-     * @param input - user input
-     * @return - returns parse coordinates as an int array
-     */
-    public static int[] parseCoor(String input) {
-        String[] in;
-        int[] coor = {-1,-1};
 
         /**
-         * Checks that the input has the format:
-         * "(" + number between 0 and 10 + ", " + number between 0 and 10 + ");"
+         * Used to update opponent's position.
+         *
+         * @param position - the opponent's position
          */
-        if (input.matches("\\((\\d|[1][0])\\,\\s(\\d|[1][0])\\);")) {
+        public static void blueMove (String position){
 
-            in = input.split(",");
+            int[] move;
 
-            try {
-                coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
-                coor[1] = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid coordinates entered! Please ensure coordinates are numeric.");
+            while (blueTurn) {
+
+                currentCoord = position; // for printing in the server and client
+                move = parseCoor(currentCoord);
+                System.out.println();
+                Board.updateBoard(move);
             }
-
-        } else {
-            System.out.println("Invalid input! Please enter coordinates in the format '(<left coordinate>, <right coordinate>);'");
         }
 
-        return coor;
+        /**
+         * Signals red player to make a move.
+         */
+        public static void redMove () {
+
+            Scanner input = new Scanner(System.in);
+            int[] move;
+
+            while (!blueTurn) {
+                Board.printBoard();
+                System.out.println("Make your move (enter hex coordinates):");
+
+                currentCoord = input.nextLine(); // for printing in the server and client
+
+                if (!currentCoord.equals("quit")) {
+                    move = parseCoor(currentCoord);
+                    System.out.println();
+                    Board.updateBoard(move);
+                } else {
+                    blueTurn = true;
+                }
+            }
+        }
+
+        /**
+         * Used to update opponent's position.
+         *
+         * @param position - the opponent's position
+         */
+        public static void redMove (String position){
+
+            int[] move;
+
+            while (!blueTurn) {
+
+                currentCoord = position; // for printing in the server and client
+                move = parseCoor(currentCoord);
+                System.out.println();
+                Board.updateBoard(move);
+            }
+        }
+
+        /**
+         * Parses user input into an int array so that the program can update the board accordingly.
+         *
+         * @param input - user input
+         * @return - returns parse coordinates as an int array
+         */
+        public static int[] parseCoor (String input){
+            String[] in;
+            int[] coor = {-1, -1};
+
+            /**
+             * Checks that the input has the format:
+             * "(" + number between 0 and 10 + ", " + number between 0 and 10 + ");"
+             */
+            if (input.matches("\\((\\d|[1][0])\\,\\s(\\d|[1][0])\\);")) {
+
+                in = input.split(",");
+
+                try {
+                    coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
+                    coor[1] = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid coordinates entered! Please ensure coordinates are numeric.");
+                }
+
+            } else {
+                System.out.println("Invalid input! Please enter coordinates in the format '(<left coordinate>, <right coordinate>);'");
+            }
+
+            return coor;
+        }
     }
-}

@@ -1,5 +1,9 @@
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ConnectException;
+import java.net.Socket;
 import java.util.Random;
 
 public class Client {
@@ -17,28 +21,6 @@ public class Client {
     public Client(String name, int number) {
         hostName = name;
         portNumber = number;
-    }
-
-    /**
-     * Connects the user to the server and starts the game.
-     */
-    public void communicate() {
-
-        try {
-            connect();
-        } catch (NullPointerException e) {
-            
-            System.out.println("\n Lost connection with the server.");
-
-            try {
-                clientSocket.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void connect() throws NullPointerException {
@@ -166,7 +148,7 @@ public class Client {
             }
 
         } catch (ConnectException e) {
-           
+
             System.out.println("There was no server available. Please enter to try again");
 
             try {
@@ -177,6 +159,28 @@ public class Client {
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Connects the user to the server and starts the game.
+     */
+    public void communicate() {
+
+        try {
+            connect();
+        } catch (NullPointerException e) {
+
+            System.out.println("\n Lost connection with the server.");
+
+            try {
+                clientSocket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

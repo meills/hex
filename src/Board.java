@@ -1,20 +1,20 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 
 public class Board {
 
-    private static final char FREE = '⬢';
-    private static final char RED = 'r';
-    private static final char BLUE = 'b';
-
     /**
      * To change the colour of the terminal output.
-     * 
+     * <p>
      * https://dev.to/awwsmm/coloured-terminal-output-with-java-57l3
      */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
-
+    private static final char FREE = '⬢';
+    private static final char RED = 'r';
+    private static final char BLUE = 'b';
     private static final int BOARD_SIZE = 11;
 
     private static char[][] board;
@@ -60,7 +60,7 @@ public class Board {
             /**
              * Prints the empty spaces at the beginning of each line.
              */
-            for (int space = 0; space < i; space ++) {
+            for (int space = 0; space < i; space++) {
                 if (space < 9) {
                     System.out.print(" ");
                 }
@@ -83,15 +83,15 @@ public class Board {
                  */
                 if (board[i][j] == 'r') {
                     System.out.print(ANSI_RED + FREE + " ");
-                } 
-                
+                }
+
                 /**
                  * Prints the blue hexagons.
                  */
                 else if (board[i][j] == 'b') {
                     System.out.print(ANSI_BLUE + FREE + " ");
-                } 
-                
+                }
+
                 /**
                  * Prints the empty spaces.
                  */
@@ -118,7 +118,7 @@ public class Board {
 
     /**
      * Updates the board based on the selected position.
-     * 
+     *
      * @param coor - the coordinates of the position
      */
     public static void updateBoard(int[] coor) {
@@ -126,7 +126,7 @@ public class Board {
         /**
          * Checks that the coordinates are in range before updating the board.
          */
-        if (coor[0] >= 0 && coor[0]< BOARD_SIZE && coor[1] >= 0 && coor[1]< BOARD_SIZE) {
+        if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
 
             /**
              * Checks that the position is free before updating the board.
@@ -271,8 +271,8 @@ public class Board {
     /**
      * For each red hexagon around the current one, checks whether they complete a path to the edge.
      *
-     * @param i - i coord of the current hexagon
-     * @param j - j coord of the current hexagon
+     * @param i       - i coord of the current hexagon
+     * @param j       - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - true if a path connecting the edges has been found, false otherwise
      */
@@ -289,7 +289,7 @@ public class Board {
         /**
          * Iterates through the ArrayLists containing the coordinates of the neighbours.
          */
-        for (ArrayList<Integer> coords: neighbours) {
+        for (ArrayList<Integer> coords : neighbours) {
 
             visited.add(coords);
 
@@ -304,8 +304,8 @@ public class Board {
     /**
      * For each blue hexagon around the current one, checks whether they complete a path to the edge.
      *
-     * @param i - i coord of the current hexagon
-     * @param j - j coord of the current hexagon
+     * @param i       - i coord of the current hexagon
+     * @param j       - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - true if a path connecting the edges has been found, false otherwise
      */
@@ -322,7 +322,7 @@ public class Board {
         /**
          * Iterates through the ArrayLists containing the coordinates of the neighbours.
          */
-        for (ArrayList<Integer> coords: neighbours) {
+        for (ArrayList<Integer> coords : neighbours) {
 
             visited.add(coords);
 
@@ -337,8 +337,8 @@ public class Board {
     /**
      * Finds the red neighbours of the hexagon.
      *
-     * @param i - i coord of the current hexagon
-     * @param j - j coord of the current hexagon
+     * @param i       - i coord of the current hexagon
+     * @param j       - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - a set containing lists of the coords of the red neighbours that were not already visited
      */
@@ -382,8 +382,8 @@ public class Board {
     /**
      * Finds the blue neighbours of the hexagon.
      *
-     * @param i - i coord of the current hexagon
-     * @param j - j coord of the current hexagon
+     * @param i       - i coord of the current hexagon
+     * @param j       - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - a set containing lists of the coords of the blue neighbours that were not already visited
      */
