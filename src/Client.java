@@ -95,7 +95,7 @@ public class Client {
                 if (start == 0) {
 
                     out.println("pass");
-                    System.out.println("Client: pass");
+                    System.out.println("pass");
 
                     while (!Game.gameComplete) {
                         String serverMove = in.readLine();
@@ -105,16 +105,21 @@ public class Client {
                          * If the client wins.
                          */
                         if (serverMove.equals("you-win; bye")) {
+                            System.out.println("bye");
+                            out.println("bye");
                             Game.gameComplete = true;
+                            clientSocket.close();
                         } else {
 
                             Game.makeMove(serverMove);
 
                             if (Game.gameComplete) {
-                                System.out.println("Client: you-win; bye");
+                                Board.printBoard();
+                                System.out.println("you-win; bye");
                                 out.println("you-win; bye");
+                                serverMove = in.readLine();
+                                System.out.println("Server: " + serverMove);
                             } else {
-
                                 Game.makeMove();
                                 Board.printBoard();
                                 out.println(Game.currentCoord);
@@ -140,22 +145,23 @@ public class Client {
                          * If the client wins.
                          */
                         if (serverMove.equals("you-win; bye")) {
+                            System.out.println("bye");
+                            out.println("bye");
                             Game.gameComplete = true;
+                            clientSocket.close();
                         } else {
                             Game.makeMove(serverMove);
 
                             if (Game.gameComplete) {
-                                System.out.println("Client: you-win; bye");
+                                Board.printBoard();
+                                System.out.println("you-win; bye");
                                 out.println("you-win; bye");
+                                serverMove = in.readLine();
+                                System.out.println("Server: " + serverMove);
+                                clientSocket.close();
                             }
                         }
                     }
-                }
-
-                // need to change it for both win conditions
-                if (in.readLine().equals("you-win; bye")) {
-                    System.out.println("Server: you-win; bye");
-                    clientSocket.close();
                 }
             }
 
