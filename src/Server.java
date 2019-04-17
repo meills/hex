@@ -1,6 +1,10 @@
-import java.io.*;
-import java.net.*;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
 
@@ -19,25 +23,13 @@ public class Server {
 
     /**
      * Constructir for the server.
-     * 
-     * @param name - the name that identifies the computer on the network (server name)
+     *
+     * @param name   - the name that identifies the computer on the network (server name)
      * @param number - the identifier of the endpoint of the communication
      */
     public Server(String name, int number) {
         hostName = name;
         portNumber = number;
-    }
-
-    /**
-     * Connects the user to the client and strts the game.
-     */
-    public void communicate() {
-
-        try {
-            connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void connect() {
@@ -93,9 +85,23 @@ public class Server {
                                 Game.makeMove();
                                 Board.printBoard();
                                 out.println(Game.currentCoord);
+
                                 clientMove = in.readLine();
                                 System.out.println("Client: " + clientMove);
-                                Game.makeMove(clientMove);
+
+                                /**
+                                 * If the server wins.
+                                 */
+                                if (clientMove.equals("you-win; bye")) {
+                                    Game.gameComplete = true;
+                                } else {
+                                    Game.makeMove(clientMove);
+
+                                    if (Game.gameComplete) {
+                                        System.out.println("Server: you-win; bye");
+                                        out.println("you-win; bye");
+                                    }
+                                }
                             }
                         }
 
@@ -107,18 +113,30 @@ public class Server {
                             while (!Game.gameComplete) {
                                 System.out.println("Client: " + clientMove);
                                 Game.makeMove(clientMove);
-                                Game.makeMove();
-                                Board.printBoard();
-                                out.println(Game.currentCoord);
-                                clientMove = in.readLine();
-                            }
-                        }
 
-                        // need to change it for both win conditions
-                        if (Game.gameComplete) {
-                            out.println("you-win; bye");
-                            System.out.println("Server: you-win; bye");
-                            serverSocket.close();
+                                /**
+                                 * If the game is complete, the client wins.
+                                 */
+                                if (Game.gameComplete) {
+                                    System.out.println("Server: you-win; bye");
+                                    out.println("you-win; bye");
+                                } else {
+
+                                    Game.makeMove();
+                                    Board.printBoard();
+                                    out.println(Game.currentCoord);
+
+                                    clientMove = in.readLine();
+
+                                    /**
+                                     * If the server wins.
+                                     */
+                                    if (clientMove.equals("you-win; bye")) {
+                                        System.out.println("Client: " + clientMove);
+                                        Game.gameComplete = true;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -140,6 +158,18 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Connects the user to the client and strts the game.
+     */
+    public void communicate() {
+
+        try {
+            connect();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -100,10 +100,26 @@ public class Client {
                     while (!Game.gameComplete) {
                         String serverMove = in.readLine();
                         System.out.println("Server: " + serverMove);
-                        Game.makeMove(serverMove);
-                        Game.makeMove();
-                        Board.printBoard();
-                        out.println(Game.currentCoord);
+
+                        /**
+                         * If the client wins.
+                         */
+                        if (serverMove.equals("you-win; bye")) {
+                            Game.gameComplete = true;
+                        } else {
+
+                            Game.makeMove(serverMove);
+
+                            if (Game.gameComplete) {
+                                System.out.println("Client: you-win; bye");
+                                out.println("you-win; bye");
+                            } else {
+
+                                Game.makeMove();
+                                Board.printBoard();
+                                out.println(Game.currentCoord);
+                            }
+                        }
                     }
                 }
 
@@ -116,9 +132,23 @@ public class Client {
                         Game.makeMove();
                         Board.printBoard();
                         out.println(Game.currentCoord);
+
                         String serverMove = in.readLine();
                         System.out.println("Server: " + serverMove);
-                        Game.makeMove(serverMove);
+
+                        /**
+                         * If the client wins.
+                         */
+                        if (serverMove.equals("you-win; bye")) {
+                            Game.gameComplete = true;
+                        } else {
+                            Game.makeMove(serverMove);
+
+                            if (Game.gameComplete) {
+                                System.out.println("Client: you-win; bye");
+                                out.println("you-win; bye");
+                            }
+                        }
                     }
                 }
 
