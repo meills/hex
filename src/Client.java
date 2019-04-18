@@ -96,10 +96,9 @@ public class Client {
                          * If the client wins.
                          */
                         else if (serverMove.equals("you-win; bye")) {
-                            System.out.println("bye");
-                            out.println("bye");
                             Game.gameComplete = true;
                             clientSocket.close();
+                            break;
                         }
 
                         else {
@@ -110,8 +109,9 @@ public class Client {
                                 Board.printBoard();
                                 System.out.println("you-win; bye");
                                 out.println("you-win; bye");
-                                serverMove = in.readLine();
-                                System.out.println("Server: " + serverMove);
+                                Game.gameComplete = true;
+                                clientSocket.close();
+                                break;
                             } else {
                                 Game.makeMove();
                                 out.println(Game.currentCoord);
@@ -121,6 +121,7 @@ public class Client {
                                 } else {
                                     Game.gameComplete = true;
                                     clientSocket.close();
+                                    break;
                                 }
                             }
                         }
@@ -157,10 +158,9 @@ public class Client {
                              * If the client wins.
                              */
                             else if (serverMove.equals("you-win; bye")) {
-                                System.out.println("bye");
-                                out.println("bye");
                                 Game.gameComplete = true;
                                 clientSocket.close();
+                                break;
                             }
 
                             else {
@@ -170,14 +170,15 @@ public class Client {
                                     Board.printBoard();
                                     System.out.println("you-win; bye");
                                     out.println("you-win; bye");
-                                    serverMove = in.readLine();
-                                    System.out.println("Server: " + serverMove);
+                                    Game.gameComplete = true;
                                     clientSocket.close();
+                                    break;
                                 }
                             }
                         } else {
                             Game.gameComplete = true;
                             clientSocket.close();
+                            break;
                         }
                     }
                 }
