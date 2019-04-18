@@ -12,6 +12,7 @@ public class Main {
      * The hostName is the computer used by the player.
      */
     static String hostName;
+    static String mode;
 
     /**
      * Port number needs to be between 1025-65535.
@@ -20,74 +21,99 @@ public class Main {
 
     public static void main(String[] args) {
 
-        /**
-         * Used to find the user's IP address.
-         */
-        InetAddress IP;
-
-        try {
-
-            IP = InetAddress.getLocalHost();
-
-            /**
-             * Used by the user to see if they are the server or a client.
-             */
-            System.out.println(Config.MY_IP + IP.getHostAddress());
-
-            hostName = IP.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        mode = Mode.requestMode();
 
         /**
-         * Lets the user choose whether they are acting as a client or a server.
+         * Runs game according to specified mode.
          */
-        System.out.println(Config.CHOOSE_MESSAGE);
-        String str = "";
+        switch (mode) {
+            case Mode.PLAYER_PLAYER: {
+                Game.initGame();
+                PlayerVsPlayer.runGame();
+                break;
+            }
+            case Mode.PLAYER_NETWORK: {
+                /**
+                 * Used to find the user's IP address.
+                 */
+                InetAddress IP;
 
-        try {
+                try {
 
-            str = stdIn.readLine();
+                    IP = InetAddress.getLocalHost();
 
-            while (!(str.equals(Config.SERVER_NO) || str.equals(Config.CLIENT_NO))) {
-                System.out.println(Config.TRY_MESSAGE);
-                str = stdIn.readLine();
+                    /**
+                     * Used by the user to see if they are the server or a client.
+                     */
+                    System.out.println(Config.MY_IP + IP.getHostAddress());
+
+                    hostName = IP.getHostAddress();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+
+                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+                /**
+                 * Lets the user choose whether they are acting as a client or a server.
+                 */
+                System.out.println(Config.CHOOSE_MESSAGE);
+                String str = "";
+
+                try {
+
+                    str = stdIn.readLine();
+
+                    while (!(str.equals(Config.SERVER_NO) || str.equals(Config.CLIENT_NO))) {
+                        System.out.println(Config.TRY_MESSAGE);
+                        str = stdIn.readLine();
+                    }
+
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                /**
+                 * If the input string is "1", sets up the server.
+                 */
+                if (str.equals(Config.SERVER_NO)) {
+                    Server server = new Server(hostName, portNumber);
+                    server.communicate();
+                }
+
+                /**
+                 * If the input string is "2", sets up the client.
+                 */
+                else {
+
+                    /**
+                     * Prompts the user to type in the IP address of the computer they are playing against.
+                     * In this case, the user is the client and the opponent is the server.
+                     */
+                    System.out.println(Config.ADDRESS_MESSAGE);
+
+                    try {
+                        String ipAddress = getIPAddress();
+                        Client client = new Client(ipAddress, portNumber);
+                        client.communicate();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            }
+            case Mode.PLAYER_AI: {
+                PlayerVsAiEasy.initGame();
+                PlayerVsAiEasy.runGame();
+                break;
+            }
+            default: {
+                System.out.println("Game unable to run.");
+                break;
             }
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        /**
-         * If the input string is "1", sets up the server.
-         */
-        if (str.equals(Config.SERVER_NO)) {
-            Server server = new Server(hostName, portNumber);
-            server.communicate();
-        }
-
-        /**
-         * If the input string is "2", sets up the client.
-         */
-        else {
-
-            /**
-             * Prompts the user to type in the IP address of the computer they are playing against.
-             * In this case, the user is the client and the opponent is the server.
-             */
-            System.out.println(Config.ADDRESS_MESSAGE);
-
-            try {
-                String ipAddress = getIPAddress();
-                Client client = new Client(ipAddress, portNumber);
-                client.communicate();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 

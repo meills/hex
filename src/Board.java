@@ -8,10 +8,10 @@ public class Board {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final char FREE = '⬢';
+    public static final char FREE = '#';
     public static final char RED = 'r';
     public static final char BLUE = 'b';
-    public static final int BOARD_SIZE = 3;
+    public static final int BOARD_SIZE = 11;
 
     public static char[][] board;
 
@@ -69,7 +69,7 @@ public class Board {
             System.out.print(ANSI_RESET);
 
             /**
-             * Positions are stored as '⬢', 'r', 'b'.
+             * Positions are stored as '#', 'r', 'b'.
              * The board is printed as hexagons of different colours.
              */
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -141,4 +141,26 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Updates the board based on the selected position by human or AI that chooses random pieces.
+     *
+     * @param coor - the coordinates of the position
+     */
+    public static void updateBoardRand(int[] coor) {
+        System.out.println("happening");
+        if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
+            if (board[coor[0]][coor[1]] == FREE) {
+                if (PlayerVsAiEasy.humanTurn) {
+                    board[coor[0]][coor[1]] = BLUE;
+                    PlayerVsAiEasy.humanTurn = false;
+                } else {
+                    board[coor[0]][coor[1]] = RED;
+                    PlayerVsAiEasy.humanTurn = true;
+                }
+
+            }
+        }
+    }
+
 }

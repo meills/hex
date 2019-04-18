@@ -74,7 +74,7 @@ public class Game {
          *
          * @param position - the opponent's position
          */
-        public static void blueMove (String position){
+        public static void blueMove(String position) {
 
             int[] move;
 
@@ -90,7 +90,7 @@ public class Game {
         /**
          * Signals red player to make a move.
          */
-        public static void redMove () {
+        public static void redMove() {
 
             Scanner input = new Scanner(System.in);
             int[] move;
@@ -115,7 +115,7 @@ public class Game {
          *
          * @param position - the opponent's position
          */
-        public static void redMove (String position){
+        public static void redMove(String position) {
 
             int[] move;
 
