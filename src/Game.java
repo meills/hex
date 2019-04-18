@@ -19,14 +19,14 @@ public class Game {
     /**
      * Used to make the current move for the current player.
      */
-    public static void makeMove() {
+    public static void playTurn() {
         if (!gameComplete) {
             if (blueTurn) {
                 blueMove();
             } else {
                 redMove();
             }
-            gameComplete = Board.isGameComplete();
+            gameComplete = Validator.validateWin();
         }
     }
 
@@ -35,14 +35,14 @@ public class Game {
      *
      * @param position - the position chosen by the opponent
      */
-    public static void makeMove(String position) {
+    public static void playTurn(String position) {
         if (!gameComplete) {
             if (blueTurn) {
                 blueMove(position);
             } else {
                 redMove(position);
             }
-            gameComplete = Board.isGameComplete();
+            gameComplete = Validator.validateWin();
         }
     }
 
@@ -55,12 +55,11 @@ public class Game {
         int[] move;
 
         while (blueTurn) {
-            Board.printBoard();
-            System.out.println("Make your move (enter hex coordinates):");
+            System.out.println(Config.MAKE_MOVE);
 
-            currentCoord = input.nextLine(); // for printing in the server and client
+            currentCoord = input.nextLine();
 
-            if (!currentCoord.equals("quit")) {
+            if (!currentCoord.equals(Config.QUIT)) {
                 move = parseCoor(currentCoord);
                 System.out.println();
                 Board.updateBoard(move);
@@ -81,7 +80,7 @@ public class Game {
 
             while (blueTurn) {
 
-                currentCoord = position; // for printing in the server and client
+                currentCoord = position;
                 move = parseCoor(currentCoord);
                 System.out.println();
                 Board.updateBoard(move);
@@ -97,12 +96,11 @@ public class Game {
             int[] move;
 
             while (!blueTurn) {
-                Board.printBoard();
-                System.out.println("Make your move (enter hex coordinates):");
+                System.out.println(Config.MAKE_MOVE);
 
                 currentCoord = input.nextLine(); // for printing in the server and client
 
-                if (!currentCoord.equals("quit")) {
+                if (!currentCoord.equals(Config.QUIT)) {
                     move = parseCoor(currentCoord);
                     System.out.println();
                     Board.updateBoard(move);
@@ -152,11 +150,11 @@ public class Game {
                     coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
                     coor[1] = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid coordinates entered! Please ensure coordinates are numeric.");
+                    System.out.println(Config.INVALID_MOVE);
                 }
 
             } else {
-                System.out.println("Invalid input! Please enter coordinates in the format '(<left coordinate>, <right coordinate>);'");
+                System.out.println(Config.INVALID_MOVE);
             }
 
             return coor;

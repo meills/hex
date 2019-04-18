@@ -43,150 +43,91 @@ public class Client {
             /**
              * Starts communication with the server.
              */
-            out.println("hello");
-            System.out.println("Client: hello");
+            out.println(Config.GREETING);
+            System.out.println(Config.CLIENT + Config.GREETING);
 
             /**
              * Checks that the server is using the same protocols.
              */
-            if (in.readLine().equals("hello")) {
-                System.out.println("Server: hello");
+            if (in.readLine().equals(Config.GREETING)) {
+                System.out.println(Config.SERVER + Config.GREETING);
 
                 /**
                  * Requests a new game. Server can respond "ready" or "reject".
                  */
-                out.println("newgame");
-                System.out.println("Client: newgame");
+                out.println(Config.GAME_REQUEST);
+                System.out.println(Config.CLIENT + Config.GAME_REQUEST);
 
-                if (in.readLine().equals("ready")) {
-                    System.out.println("Server: ready");
+                if (in.readLine().equals(Config.ACCEPT)) {
+                    System.out.println(Config.SERVER + Config.ACCEPT);
                 }
 
                 /**
                  * Initialises a new game.
                  */
                 Game.initGame();
+                Board.printBoard();
 
                 Random rand = new Random();
 
+                String serverMove;
+
                 int start = rand.nextInt(2);
 
-                /**
-                 * If the server starts first.
-                 */
                 if (start == 0) {
+                    Game.playTurn();
+                    out.println(Game.currentCoord);
 
-                    out.println("pass");
-                    System.out.println("pass");
-
-                    while (!Game.gameComplete) {
-                        String serverMove = in.readLine();
-                        System.out.println("Server: " + serverMove);
-
-                        /**
-                         * If the server quits.
-                         */
-                        if (serverMove.equals("quit")) {
-                            clientSocket.close();
-                            Game.gameComplete = true;
-                            break;
-                        }
-
-                        /**
-                         * If the client wins.
-                         */
-                        else if (serverMove.equals("you-win; bye")) {
-                            Game.gameComplete = true;
-                            clientSocket.close();
-                            break;
-                        }
-
-                        else {
-
-                            Game.makeMove(serverMove);
-
-                            if (Game.gameComplete) {
-                                Board.printBoard();
-                                System.out.println("you-win; bye");
-                                out.println("you-win; bye");
-                                Game.gameComplete = true;
-                                clientSocket.close();
-                                break;
-                            } else {
-                                Game.makeMove();
-                                out.println(Game.currentCoord);
-
-                                if (!Game.currentCoord.equals("quit")) {
-                                    Board.printBoard();
-                                } else {
-                                    Game.gameComplete = true;
-                                    clientSocket.close();
-                                    break;
-                                }
-                            }
-                        }
+                    if (Game.currentCoord.equals(Config.QUIT)) {
+                        Game.gameComplete = true;
                     }
+
+                    if (!Game.gameComplete) {
+                        Board.printBoard();
+                    }
+                } else {
+                    System.out.println(Config.CLIENT + Config.PASS);
+                    out.println(Config.PASS);
                 }
 
-                /**
-                 * If the client starts first.
-                 */
-                else {
+                while (!Game.gameComplete) {
+                    serverMove = in.readLine();
+                    System.out.println(Config.SERVER + serverMove);
 
-                    while (!Game.gameComplete) {
-                        Game.makeMove();
-                        out.println(Game.currentCoord);
+                    if (serverMove.equals(Config.QUIT) || serverMove.equals(Config.WIN_MESSAGE)) {
+                        Game.gameComplete = true;
+                        break;
+                    }
 
-                        if (!Game.currentCoord.equals("quit")) {
+                    Game.playTurn(serverMove);
+                    Board.printBoard();
 
-                            Board.printBoard();
+                    if (Game.gameComplete) {
+                        System.out.println(Config.LOSE_MESSAGE);
+                        out.println(Config.WIN_MESSAGE);
+                        Game.gameComplete = true;
+                        break;
+                    }
 
-                            String serverMove = in.readLine();
-                            System.out.println("Server: " + serverMove);
+                    Game.playTurn();
+                    out.println(Game.currentCoord);
 
-                            /**
-                             * If the server quits.
-                             */
-                            if (serverMove.equals("quit")) {
-                                clientSocket.close();
-                                Game.gameComplete = true;
-                                break;
-                            }
+                    if (Game.currentCoord.equals(Config.QUIT)) {
+                        Game.gameComplete = true;
+                        break;
+                    }
 
+                    Board.printBoard();
 
-                            /**
-                             * If the client wins.
-                             */
-                            else if (serverMove.equals("you-win; bye")) {
-                                Game.gameComplete = true;
-                                clientSocket.close();
-                                break;
-                            }
-
-                            else {
-                                Game.makeMove(serverMove);
-
-                                if (Game.gameComplete) {
-                                    Board.printBoard();
-                                    System.out.println("you-win; bye");
-                                    out.println("you-win; bye");
-                                    Game.gameComplete = true;
-                                    clientSocket.close();
-                                    break;
-                                }
-                            }
-                        } else {
-                            Game.gameComplete = true;
-                            clientSocket.close();
-                            break;
-                        }
+                    if (Game.gameComplete) {
+                        System.out.println(Config.SERVER + in.readLine());
                     }
                 }
             }
 
         } catch (ConnectException e) {
 
-            System.out.println("There was no server available. Please enter to try again");
+            System.out.println(Config.SERVER_UNAVAILABLE);
 
             try {
                 stdIn.readLine();
@@ -209,7 +150,7 @@ public class Client {
             connect();
         } catch (NullPointerException e) {
 
-            System.out.println("\n Lost connection with the server.");
+            System.out.println(Config.LOST_CONNECTION);
 
             try {
                 clientSocket.close();
