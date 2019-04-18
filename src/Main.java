@@ -16,7 +16,7 @@ public class Main {
     /**
      * Port number needs to be between 1025-65535.
      */
-    static int portNumber = 8000;
+    static int portNumber = 6660;
 
     public static void main(String[] args) {
 
@@ -32,7 +32,7 @@ public class Main {
             /**
              * Used by the user to see if they are the server or a client.
              */
-            System.out.println("IP of my system is := " + IP.getHostAddress());
+            System.out.println(Config.MY_IP + IP.getHostAddress());
 
             hostName = IP.getHostAddress();
         } catch (UnknownHostException e) {
@@ -44,15 +44,15 @@ public class Main {
         /**
          * Lets the user choose whether they are acting as a client or a server.
          */
-        System.out.println("Type 1 for a server. Type 2 for a client.");
+        System.out.println(Config.CHOOSE_MESSAGE);
         String str = "";
 
         try {
 
             str = stdIn.readLine();
 
-            while (!(str.equals("1") || str.equals("2"))) {
-                System.out.println("Try again");
+            while (!(str.equals(Config.SERVER_NO) || str.equals(Config.CLIENT_NO))) {
+                System.out.println(Config.TRY_MESSAGE);
                 str = stdIn.readLine();
             }
 
@@ -65,7 +65,7 @@ public class Main {
         /**
          * If the input string is "1", sets up the server.
          */
-        if (str.equals("1")) {
+        if (str.equals(Config.SERVER_NO)) {
             Server server = new Server(hostName, portNumber);
             server.communicate();
         }
@@ -79,7 +79,7 @@ public class Main {
              * Prompts the user to type in the IP address of the computer they are playing against.
              * In this case, the user is the client and the opponent is the server.
              */
-            System.out.println("Please type in the IP Address that you want to compete against.");
+            System.out.println(Config.ADDRESS_MESSAGE);
 
             try {
                 String ipAddress = getIPAddress();
@@ -128,7 +128,7 @@ public class Main {
          * If the IP address is not valid, prompts the user to enter another IP address.
          */
         if (!pass) {
-            System.out.println("Not a valid IP address. Try again");
+            System.out.println(Config.INVALID_ADDRESS);
             ipAddress = getIPAddress();
         }
 
