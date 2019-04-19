@@ -29,6 +29,6 @@ public abstract class Config {
 
     public static final String MAKE_MOVE = "\nMake your move (enter hex coordinates):";
     public static final String INVALID_MOVE = "\nInvalid input! Please enter coordinates in the format " +
-            "\"(<number between 0 and " + (Board.BOARD_SIZE - 1) +">, <number between 0 and " + (Board.BOARD_SIZE - 1) + ">);\"";
+            "\"(<number between 0 and " + (Board.BOARD_SIZE - 1) +">,<number between 0 and " + (Board.BOARD_SIZE - 1) + ">);\"";
     public static final String TILE_OCCUPIED = "\nInvalid move! Hex tile is already occupied.";
 }

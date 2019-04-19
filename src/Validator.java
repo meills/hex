@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Scanner;
 
 public abstract class Validator {
 
@@ -10,6 +11,9 @@ public abstract class Validator {
      * @return - true if the game is finished, false otherwise
      */
     public static boolean validateWin() {
+
+        Scanner sc = new Scanner(System.in);
+        String ok = sc.nextLine();
 
         boolean gameComplete = false;
 
@@ -34,6 +38,8 @@ public abstract class Validator {
                          * Used to check which hexagons were visited to avoid infinite loops.
                          */
                         LinkedHashSet<ArrayList<Integer>> visited = new LinkedHashSet<>();
+                        ArrayList<Integer> current = new ArrayList<>(Arrays.asList(i, 0));
+                        visited.add(current);
 
                         gameComplete = redConnectsToEdge(i, 0, visited);
                     }
@@ -62,6 +68,8 @@ public abstract class Validator {
                          * Used to check which hexagons were visited to avoid infinite loops.
                          */
                         LinkedHashSet<ArrayList<Integer>> visited = new LinkedHashSet<>();
+                        ArrayList<Integer> current = new ArrayList<>(Arrays.asList(0, j));
+                        visited.add(current);
 
                         /**
                          * j and 0 are in the opposite order from the red player,
