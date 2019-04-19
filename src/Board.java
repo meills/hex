@@ -8,7 +8,7 @@ public class Board {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final char FREE = '#';
+    public static final char FREE = '⬢';
     public static final char RED = 'r';
     public static final char BLUE = 'b';
     public static final int BOARD_SIZE = 11;
@@ -69,7 +69,7 @@ public class Board {
             System.out.print(ANSI_RESET);
 
             /**
-             * Positions are stored as '#', 'r', 'b'.
+             * Positions are stored as '⬢', 'r', 'b'.
              * The board is printed as hexagons of different colours.
              */
             for (int j = 0; j < BOARD_SIZE; j++) {
