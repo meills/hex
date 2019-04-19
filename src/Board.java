@@ -33,6 +33,9 @@ public class Board {
         }
     }*/
 
+    /**
+     * Prints board
+     */
     public static void printBoard() {
         System.out.println();
 
@@ -43,7 +46,7 @@ public class Board {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
 
-            for (int space = 0; space < i; space ++) {
+            for (int space = 0; space < i; space++) {
                 if (space < 9) {
                     System.out.print(OFFSET_ONE);
                 }
@@ -61,13 +64,17 @@ public class Board {
         System.out.println();
     }
 
+    /**
+     * Updates board according to specified coordinates.
+     *
+     * @param coor - coordinates on hex board
+     */
     public static void updateBoard(int[] coor) {
         if (board[coor[0]][coor[1]] == FREE) {
             if (Game.blueTurn) {
                 board[coor[0]][coor[1]] = BLUE;
                 Game.blueTurn = false;
-            } else  if (!Game.blueTurn) {
-                System.out.println(coor[0] + coor[1]);
+            } else if (!Game.blueTurn) {
                 board[coor[0]][coor[1]] = RED;
                 Game.blueTurn = true;
             }
@@ -77,6 +84,11 @@ public class Board {
     }
 
 
+    /**
+     * Method checks if game is complete and returns a boolean value.
+     *
+     * @return - boolean value denoting if game is complete
+     */
     public static boolean isGameComplete() {
         boolean gameComplete = false;
 
@@ -88,10 +100,12 @@ public class Board {
         // value - array list of coordinates
         HashMap<Integer, ArrayList<int[]>> rows;
 
-        int[] coor = new int[2];
+        int[] coor;
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
+                coor = new int[2];
+
                 switch (board[i][j]) {
                     case 'b':
                         coor[0] = i;
@@ -103,13 +117,14 @@ public class Board {
                         coor[1] = j;
                         redCoor.add(coor);
                         break;
-
+                    default:
+                        break;
                 }
             }
         }
 
-        //checks for blue winning
 
+        //checks for blue winning
 
 
         rows = new HashMap<>();
@@ -124,9 +139,9 @@ public class Board {
             }
         }
 
-        for (int i =0; i < board.length; i++) {
+        for (int i = 0; i < board.length; i++) {
             if (rows.get(i).size() != 0) {
-                for (int[] bc: rows.get(i)) {
+                for (int[] bc : rows.get(i)) {
                     if (i > 0) {
 
                     }
@@ -139,10 +154,12 @@ public class Board {
         }
 
 
-
-        return gameComplete;
+        // statements for debugging
+        System.out.println("blue coords:");
+        for(int[] cor:blueCoor) {
+            System.out.println(cor[0] + " " + cor[1]);
+        }
     }
-
 
     /**
      * Generates all coordinates of adjacent hex pieces.
@@ -200,7 +217,6 @@ public class Board {
 
         return adjCoor;
     }
-
 
     public static void offsetBoard() {
         System.out.print(OFFSET_THREE + OFFSET_THREE);
