@@ -39,7 +39,7 @@ public class Mode {
         }
 
         while (!validMode) {
-            System.out.println("Invalid mode entered! Please enter a digit from 1-4.");
+            System.out.println("Invalid mode entered! Please enter a digit from 1-3.");
             System.out.println();
 
             System.out.println("Choose your game mode:");
@@ -83,7 +83,7 @@ public class Mode {
         }
 
         while (!validMode) {
-            System.out.println("Invalid mode entered! Please enter a digit from 1-4.");
+            System.out.println("Invalid mode entered! Please enter a digit from 1-3.");
             System.out.println();
 
             System.out.println("Choose your game mode:");

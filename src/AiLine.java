@@ -30,8 +30,9 @@ public class AiLine {
         int index;
 
         index = rand.nextInt(line.size());
-
         int[] coords = ((int[]) Arrays.asList(line.toArray()).get(index));
+        
+        removeCoord(coords);
 
         //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
         //System.out.println(line.get(index)[0] + " " + line.get(index)[1]);
@@ -45,8 +46,7 @@ public class AiLine {
     public static void aiMoveCheck(int[] move) {
         List<Object> altMoves = new ArrayList<>();
 
-        System.out.println("human move: " + move[0] + " " + move[1]);
-        debugLine();
+        // debugLine();
 
         Iterator<int[]> it = line.iterator();
         while (it.hasNext()) {
@@ -78,7 +78,7 @@ public class AiLine {
             line.add(altCoords);
         }
 
-        debugLine();
+        // debugLine();
     }
 
     /**

@@ -113,14 +113,12 @@ public class Game {
      */
     public static void blueMove(String position) {
 
-        int[] move;
-
         while (blueTurn) {
 
             currentCoord = position;
-            move = parseCoor(currentCoord);
+            coordIndices = parseCoor(currentCoord);
             System.out.println();
-            Board.updateBoard(move);
+            Board.updateBoard(coordIndices);
         }
 
         if (aiGame) {
@@ -132,8 +130,6 @@ public class Game {
      * Signals red player to make a move.
      */
     public static void redMove() {
-
-        int[] move;
 
         /**
          * Player's move
@@ -147,9 +143,9 @@ public class Game {
                 currentCoord = input.nextLine(); // for printing in the server and client
 
                 if (!currentCoord.equals(Config.QUIT)) {
-                    move = parseCoor(currentCoord);
+                    coordIndices = parseCoor(currentCoord);
                     System.out.println();
-                    Board.updateBoard(move);
+                    Board.updateBoard(coordIndices);
                 }
             }
         }
@@ -166,9 +162,9 @@ public class Game {
             System.out.println("AI's move:");
             currentCoord = AI.getCoords();
             System.out.println(currentCoord);
-            move = parseCoor(currentCoord);
+            coordIndices = parseCoor(currentCoord);
             System.out.println();
-            Board.updateBoard(move);
+            Board.updateBoard(coordIndices);
         }
 
         blueTurn = true;
@@ -187,9 +183,9 @@ public class Game {
         while (!blueTurn) {
 
             currentCoord = position; // for printing in the server and client
-            move = parseCoor(currentCoord);
+            coordIndices = parseCoor(currentCoord);
             System.out.println();
-            Board.updateBoard(move);
+            Board.updateBoard(coordIndices);
         }
 
         if (aiGame) {

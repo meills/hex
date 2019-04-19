@@ -12,9 +12,6 @@ public abstract class Validator {
      */
     public static boolean validateWin() {
 
-        Scanner sc = new Scanner(System.in);
-        String ok = sc.nextLine();
-
         boolean gameComplete = false;
 
         /**
