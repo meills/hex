@@ -37,7 +37,11 @@ public class PlayerVsPlayer {
 
             move = Game.parseCoor(input.nextLine());
 
+            System.out.println(move[0] + " " + move[1]);
+
             if (move[0] == -1) {
+                System.out.println(Config.INVALID_MOVE);
+                System.out.println();
                 break;
             }
 
@@ -61,6 +65,8 @@ public class PlayerVsPlayer {
             move = Game.parseCoor(input.nextLine());
 
             if (move[0] == -1) {
+                System.out.println(Config.INVALID_MOVE);
+                System.out.println();
                 break;
             }
 

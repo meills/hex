@@ -41,6 +41,8 @@ public class AiRandom extends AiMode{
             move = Game.parseCoor(input.nextLine());
 
             if (move[0] == -1) {
+                System.out.println(Config.INVALID_MOVE);
+                System.out.println();
                 break;
             }
 
@@ -53,7 +55,7 @@ public class AiRandom extends AiMode{
      * Carry out AI's move and updates board accordingly.
      */
     public static void aiMove() {
-        System.out.println("Computer making its move...");
+        System.out.println(Config.AI_MOVE);
         System.out.println();
         Random random = new Random();
         int[] move = new int[2];

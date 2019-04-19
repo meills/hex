@@ -17,22 +17,25 @@ public class AiLine extends AiMode{
     public static void initGame() {
         AiMode.initGame();
         Random rand = new Random();
-        int[] coords = new int[2];
+        int[] coords;
+        int row;
 
         Board.initBoard();
         line = new ArrayList<>();
-        coords[0] = rand.nextInt(Board.BOARD_SIZE);
+        row = rand.nextInt(Board.BOARD_SIZE);
 
         /**
          * Generates a random line.
          */
         for (int i = 0; i < Board.BOARD_SIZE; i++) {
+            coords = new int[2];
+            coords[0] = row;
             coords[1] = i;
+            System.out.println(coords[0] + " " + coords[1]);
             line.add(coords);
+            //debugLine();
         }
-
     }
-
 
     /**
      * Runs player vs random ai mode.
@@ -51,7 +54,6 @@ public class AiLine extends AiMode{
 
             gameComplete = Validator.validateWin();
         }
-
     }
 
     /**
@@ -72,28 +74,54 @@ public class AiLine extends AiMode{
 
             move = Game.parseCoor(input.nextLine());
 
+            aiMoveCheck(move);
+
             if (move[0] == -1) {
+                System.out.println(Config.INVALID_MOVE);
+                System.out.println();
                 break;
             }
 
             System.out.println();
             Board.updateBoardRand(move);
         }
-
     }
 
     /**
      * Carry out AI's move and updates board accordingly.
      */
     public static void aiMove() {
+        System.out.println(Config.AI_MOVE);
+        System.out.println();
+
         Random rand = new Random();
         int index;
 
         index = rand.nextInt(line.size());
-        System.out.println(line.size() + " " + index);
-
+        //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
         //System.out.println(line.get(index)[0] + " " + line.get(index)[1]);
-        //System.out.println(index);
+
         Board.updateBoardLine(line.get(index));
+    }
+
+    /**
+     * Checks if generated line coordinates are used by human player and modifies line move accordingly.
+     * @param move - human player's move
+     */
+    public static void aiMoveCheck(int[] move) {
+        if (line.contains(move)) {
+            line.remove(move);
+        }
+    }
+
+
+    public static void debugLine() {
+        System.out.print("line coords: ");
+
+        for (int[] coords: line) {
+            System.out.print("(" + coords[0] + ", " + coords[1] + ") ");
+        }
+
+        System.out.println();
     }
 }

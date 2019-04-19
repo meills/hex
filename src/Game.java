@@ -137,6 +137,8 @@ public class Game {
         public static int[] parseCoor (String input){
             String[] in;
             int[] coor = {-1, -1};
+            int x = -1;
+            int y = -1;
 
             /**
              * Checks that the input has the format:
@@ -147,16 +149,17 @@ public class Game {
                 in = input.split(",");
 
                 try {
-                    coor[0] = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
-                    coor[1] = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
+                    x = Integer.parseInt(in[0].replaceAll("[\\s\\(\\);]+", ""));
+                    y = Integer.parseInt(in[1].replaceAll("[\\s\\(\\);]+", ""));
                 } catch (NumberFormatException e) {
                     System.out.println(Config.INVALID_MOVE);
                 }
-
-            } else {
-                System.out.println(Config.INVALID_MOVE);
             }
 
+            if ((x > 0 && x < Board.BOARD_SIZE) || (y > 0 && y < Board.BOARD_SIZE)) {
+                coor[0] = x;
+                coor[1] = y;
+            }
             return coor;
         }
     }

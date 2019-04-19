@@ -11,7 +11,7 @@ public class Board {
     public static final char FREE = '⬢';
     public static final char RED = 'r';
     public static final char BLUE = 'b';
-    public static final int BOARD_SIZE = 11;
+    public static final int BOARD_SIZE = 5;
 
     public static char[][] board;
 
@@ -170,16 +170,21 @@ public class Board {
     public static void updateBoardLine(int[] coor) {
         if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
             //System.out.println(board[coor[0]][coor[1]]);
+            System.out.println("ai coords:" + coor[0] + " " + coor[1]);
             if (board[coor[0]][coor[1]] == FREE) {
                 if (AiRandom.humanTurn) {
                     board[coor[0]][coor[1]] = BLUE;
                     AiRandom.humanTurn = false;
+                    AiLine.line.remove(coor);
                 } else {
                     board[coor[0]][coor[1]] = RED;
                     AiRandom.humanTurn = true;
+                    AiLine.line.remove(coor);
                 }
             } else {
-                AiLine.line.remove(coor);
+                if (AiRandom.humanTurn) {
+                    System.out.println(Config.TILE_OCCUPIED);
+                }
             }
         }
     }
