@@ -148,17 +148,38 @@ public class Board {
      * @param coor - the coordinates of the position
      */
     public static void updateBoardRand(int[] coor) {
-        System.out.println("happening");
         if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
             if (board[coor[0]][coor[1]] == FREE) {
-                if (PlayerVsAiEasy.humanTurn) {
+                if (AiRandom.humanTurn) {
                     board[coor[0]][coor[1]] = BLUE;
-                    PlayerVsAiEasy.humanTurn = false;
+                    AiRandom.humanTurn = false;
                 } else {
                     board[coor[0]][coor[1]] = RED;
-                    PlayerVsAiEasy.humanTurn = true;
+                    AiRandom.humanTurn = true;
                 }
 
+            }
+        }
+    }
+
+    /**
+     * Updates the board based on the selected position by human or coordinates of line AI generated.
+     *
+     * @param coor - the coordinates of the position
+     */
+    public static void updateBoardLine(int[] coor) {
+        if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
+            //System.out.println(board[coor[0]][coor[1]]);
+            if (board[coor[0]][coor[1]] == FREE) {
+                if (AiRandom.humanTurn) {
+                    board[coor[0]][coor[1]] = BLUE;
+                    AiRandom.humanTurn = false;
+                } else {
+                    board[coor[0]][coor[1]] = RED;
+                    AiRandom.humanTurn = true;
+                }
+            } else {
+                AiLine.line.remove(coor);
             }
         }
     }

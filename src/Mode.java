@@ -5,7 +5,9 @@ import java.io.InputStreamReader;
 public class Mode {
     public static final String PLAYER_PLAYER = "1";
     public static final String PLAYER_NETWORK = "2";
-    public static final String PLAYER_AI = "3";
+    public static final String PLAYER_AI_RAND = "3";
+    public static final String PLAYER_AI_LINE = "4";
+
 
     private static String mode;
 
@@ -22,7 +24,8 @@ public class Mode {
         System.out.println("Game modes:");
         System.out.println("1 - Player vs Player");
         System.out.println("2 - Player vs Network Player");
-        System.out.println("3 - Player vs AI");
+        System.out.println("3 - Player vs AI (Random)");
+        System.out.println("4 - Player vs AI (Line)");
         System.out.println();
 
         System.out.println("Choose your game mode:");
@@ -34,16 +37,17 @@ public class Mode {
             e.printStackTrace();
         }
 
-        if (mode.matches("[1-3]")) {
+        if (mode.matches("[1-4]")) {
             validMode = true;
         }
 
         while (!validMode) {
-            System.out.println("Invalid mode entered! Please enter '1', '2' or '3'.");
+            System.out.println("Invalid mode entered! Please enter a digit from 1-4.");
             System.out.println();
 
             System.out.println("Choose your game mode:");
             stdIn = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println();
 
             try {
                 mode = stdIn.readLine().replaceAll("\\s+", "");
@@ -51,7 +55,7 @@ public class Mode {
                 e.printStackTrace();
             }
 
-            if (mode.matches("[1-3]")) {
+            if (mode.matches("[1-4]")) {
                 validMode = true;
             }
         }

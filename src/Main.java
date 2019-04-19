@@ -104,9 +104,14 @@ public class Main {
                 }
                 break;
             }
-            case Mode.PLAYER_AI: {
-                PlayerVsAiEasy.initGame();
-                PlayerVsAiEasy.runGame();
+            case Mode.PLAYER_AI_RAND: {
+                AiRandom.initGame();
+                AiRandom.runGame();
+                break;
+            }
+            case Mode.PLAYER_AI_LINE: {
+                AiLine.initGame();
+                AiLine.runGame();
                 break;
             }
             default: {

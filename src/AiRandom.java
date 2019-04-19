@@ -4,19 +4,7 @@ import java.util.Scanner;
 /**
  * A game mode where a human player plays against an AI that chooses completely random pieces on the Hex board.
  */
-public class PlayerVsAiEasy {
-    public static boolean humanTurn;
-    public static boolean gameComplete;
-
-
-    /**
-     * Initialises play vs random ai mode.
-     */
-    public static void initGame() {
-        humanTurn = true;
-        gameComplete = false;
-        Board.initBoard();
-    }
+public class AiRandom extends AiMode{
 
     /**
      * Runs player vs random ai mode.
@@ -65,18 +53,15 @@ public class PlayerVsAiEasy {
      * Carry out AI's move and updates board accordingly.
      */
     public static void aiMove() {
-        System.out.println("AI making its move...");
+        System.out.println("Computer making its move...");
+        System.out.println();
         Random random = new Random();
         int[] move = new int[2];
 
         while (!humanTurn) {
-            move[0] = random.nextInt(11);
-            move[1] = random.nextInt(11);
+            move[0] = random.nextInt(Board.BOARD_SIZE);
+            move[1] = random.nextInt(Board.BOARD_SIZE);
             Board.updateBoardRand(move);
         }
     }
-
-
-
-
 }
