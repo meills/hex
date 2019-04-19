@@ -175,18 +175,23 @@ public class Board {
                 if (AiRandom.humanTurn) {
                     board[coor[0]][coor[1]] = BLUE;
                     AiRandom.humanTurn = false;
-                    AiLine.line.remove(coor);
+
+                    //Line ai considers human move before making next move
+                    AiLine.aiMoveCheck(coor);
+                    //AiLine.line.remove(coor);
                 } else {
                     board[coor[0]][coor[1]] = RED;
                     AiRandom.humanTurn = true;
-                    AiLine.line.remove(coor);
+                    AiLine.removeCoord(coor);
+                    AiLine.debugLine();
                 }
             } else {
                 if (AiRandom.humanTurn) {
                     System.out.println(Config.TILE_OCCUPIED);
+                } else {
+                    AiLine.removeCoord(coor);
                 }
             }
         }
     }
-
 }

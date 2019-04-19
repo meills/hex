@@ -1,13 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 /**
  * A game mode where a human player plays against an AI that tries to complete a line across the board.
  */
 public class AiLine extends AiMode{
-    public static ArrayList<int[]> line;
+    public static HashSet<int[]> line;
 
     /**
      * This method overrides AiMode's initGame() method.
@@ -21,7 +18,7 @@ public class AiLine extends AiMode{
         int row;
 
         Board.initBoard();
-        line = new ArrayList<>();
+        line = new HashSet<>();
         row = rand.nextInt(Board.BOARD_SIZE);
 
         /**
@@ -31,9 +28,7 @@ public class AiLine extends AiMode{
             coords = new int[2];
             coords[0] = row;
             coords[1] = i;
-            System.out.println(coords[0] + " " + coords[1]);
             line.add(coords);
-            //debugLine();
         }
     }
 
@@ -74,7 +69,6 @@ public class AiLine extends AiMode{
 
             move = Game.parseCoor(input.nextLine());
 
-            aiMoveCheck(move);
 
             if (move[0] == -1) {
                 System.out.println(Config.INVALID_MOVE);
@@ -83,7 +77,7 @@ public class AiLine extends AiMode{
             }
 
             System.out.println();
-            Board.updateBoardRand(move);
+            Board.updateBoardLine(move);
         }
     }
 
@@ -100,8 +94,7 @@ public class AiLine extends AiMode{
         index = rand.nextInt(line.size());
         //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
         //System.out.println(line.get(index)[0] + " " + line.get(index)[1]);
-
-        Board.updateBoardLine(line.get(index));
+        Board.updateBoardLine((int[]) Arrays.asList(line.toArray()).get(index));
     }
 
     /**
@@ -109,12 +102,123 @@ public class AiLine extends AiMode{
      * @param move - human player's move
      */
     public static void aiMoveCheck(int[] move) {
-        if (line.contains(move)) {
-            line.remove(move);
+        List<Object> altMoves = new ArrayList<>();
+
+        System.out.println("human move: " + move[0] + " " + move[1]);
+        debugLine();
+
+        Iterator<int[]> it = line.iterator();
+        while (it.hasNext()) {
+            int[] coords = it.next();
+
+            if (coords[0] == move[0] && coords[1] == move[1]) {
+                it.remove();
+                altMoves = genAltMoves(move);
+            }
         }
+
+
+
+        it = line.iterator();
+
+        // checks for any repeats and removes them
+        while (it.hasNext()) {
+            int[] lineCoords = it.next();
+            int[] altCoords;
+
+            for (Object altMove: altMoves) {
+                altCoords = (int[]) altMove;
+                if (altCoords[0] == lineCoords[0] && altCoords[1] == lineCoords[1]) {
+                    it.remove();
+                }
+            }
+        }
+
+        for (Object altMove: altMoves) {
+            int[] altCoords = (int[]) altMove;
+            line.add(altCoords);
+        }
+
+
+        debugLine();
     }
 
+    /**
+     * Adds alternate coordinates when one of the line's tiles are occupied by the opponent.
+     * @param move - human player's move
+     * @return - List of alternate moves
+     */
+    public static List<Object> genAltMoves(int[] move) {
+        HashSet<int[]> neighbours = new HashSet<>();
+        int[] neighbour;
 
+        if (move[0] > 0) {
+            neighbour = new int[2];
+            neighbour[0] = move[0] - 1;
+            neighbour[1] =  move[1];
+
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+
+        if (move[0] > 0 && move[1] < Board.BOARD_SIZE -1) {
+            neighbour = new int[2];
+            neighbour[0] = move[0] - 1;
+            neighbour[1] =  move[1] + 1;
+            neighbours.add(neighbour);
+
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+
+        if (move[1] < Board.BOARD_SIZE - 1) {
+            neighbour = new int[2];
+            neighbour[0] = move[0];
+            neighbour[1] =  move[1] + 1;
+            neighbours.add(neighbour);
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+
+        if (move[0] < Board.BOARD_SIZE - 1) {
+            neighbour = new int[2];
+            neighbour[0] = move[0] + 1;
+            neighbour[1] =  move[1];
+            neighbours.add(neighbour);
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+
+
+        if (move[0] < Board.BOARD_SIZE - 1 && move[1] > 0) {
+            neighbour = new int[2];
+            neighbour[0] = move[0] + 1;
+            neighbour[1] =  move[1] - 1;
+            neighbours.add(neighbour);
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+
+        if (move[1] > 0) {
+            neighbour = new int[2];
+            neighbour[0] = move[0];
+            neighbour[1] =  move[1] - 1;
+            neighbours.add(neighbour);
+            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
+                neighbours.add(neighbour);
+            }
+        }
+        return (List<Object>) Arrays.asList(neighbours.toArray());
+    }
+
+    /**
+     * Method to check all the coordinates of pieces to form a line.
+     */
     public static void debugLine() {
         System.out.print("line coords: ");
 
@@ -123,5 +227,17 @@ public class AiLine extends AiMode{
         }
 
         System.out.println();
+    }
+
+    public static void removeCoord(int[] move) {
+        Iterator<int[]> it = line.iterator();
+        int[] lineCoor;
+
+        while (it.hasNext()) {
+            lineCoor = it.next();
+            if (lineCoor[0] == move[0] && lineCoor[1] == move[1]) {
+                it.remove();
+            }
+        }
     }
 }

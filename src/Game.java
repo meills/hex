@@ -156,7 +156,7 @@ public class Game {
                 }
             }
 
-            if ((x > 0 && x < Board.BOARD_SIZE) || (y > 0 && y < Board.BOARD_SIZE)) {
+            if ((x >= 0 && x < Board.BOARD_SIZE) || (y >= 0 && y < Board.BOARD_SIZE)) {
                 coor[0] = x;
                 coor[1] = y;
             }
