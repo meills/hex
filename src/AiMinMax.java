@@ -26,7 +26,7 @@ public class AiMinMax {
         row = rand.nextInt(Board.BOARD_SIZE);
 
         //sets coords for edge piece to generate jagged line from
-        row
+
 
         /**
          * Generates a random line.
