@@ -138,25 +138,25 @@ public abstract class Validator {
     /**
      * For each red hexagon around the current one, checks whether they complete a path to the edge.
      *
-     * @param i       - i coord of the current hexagon
-     * @param j       - j coord of the current hexagon
+     * @param i - i coord of the current hexagon
+     * @param j - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - true if a path connecting the edges has been found, false otherwise
      */
     public static boolean redConnectsToEdge(int i, int j, LinkedHashSet<ArrayList<Integer>> visited) {
 
-        if (j == Board.BOARD_SIZE - 1) {
+        if (j == 10) {
             return true;
         }
 
-        LinkedHashSet<ArrayList<Integer>> neighbours = getNeighbours(Board.RED, i, j, visited);
+        LinkedHashSet<ArrayList<Integer>> neighbours = redSetNeighbours(i, j, visited);
 
         boolean foundEdge = false;
 
         /**
          * Iterates through the ArrayLists containing the coordinates of the neighbours.
          */
-        for (ArrayList<Integer> coords : neighbours) {
+        for (ArrayList<Integer> coords: neighbours) {
 
             visited.add(coords);
 
@@ -171,25 +171,25 @@ public abstract class Validator {
     /**
      * For each blue hexagon around the current one, checks whether they complete a path to the edge.
      *
-     * @param i       - i coord of the current hexagon
-     * @param j       - j coord of the current hexagon
+     * @param i - i coord of the current hexagon
+     * @param j - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
      * @return - true if a path connecting the edges has been found, false otherwise
      */
     public static boolean blueConnectsToEdge(int i, int j, LinkedHashSet<ArrayList<Integer>> visited) {
 
-        if (i == Board.BOARD_SIZE - 1) {
+        if (i == 10) {
             return true;
         }
 
-        LinkedHashSet<ArrayList<Integer>> neighbours = getNeighbours(Board.BLUE, i, j, visited);
+        LinkedHashSet<ArrayList<Integer>> neighbours = blueSetNeighbours(i, j, visited);
 
         boolean foundEdge = false;
 
         /**
          * Iterates through the ArrayLists containing the coordinates of the neighbours.
          */
-        for (ArrayList<Integer> coords : neighbours) {
+        for (ArrayList<Integer> coords: neighbours) {
 
             visited.add(coords);
 
@@ -202,43 +202,88 @@ public abstract class Validator {
     }
 
     /**
-     * Finds the neighbours of the hexagon that have the same colour.
+     * Finds the red neighbours of the hexagon.
      *
-     * @param i       - i coord of the current hexagon
-     * @param j       - j coord of the current hexagon
+     * @param i - i coord of the current hexagon
+     * @param j - j coord of the current hexagon
      * @param visited - the set of hexagons that were already visited
-     * @return - a set containing lists of the coords of the relevant neighbours that were not already visited
+     * @return - a set containing lists of the coords of the red neighbours that were not already visited
      */
-    public static LinkedHashSet<ArrayList<Integer>> getNeighbours(char player, int i, int j, LinkedHashSet<ArrayList<Integer>> visited) {
+    public static LinkedHashSet<ArrayList<Integer>> redSetNeighbours(int i, int j, LinkedHashSet<ArrayList<Integer>> visited) {
 
         LinkedHashSet<ArrayList<Integer>> neighbours = new LinkedHashSet<>();
 
-        if (i + 1 <= Board.BOARD_SIZE - 1 && Board.board[i + 1][j] == player && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j)))) {
-            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j));
-            neighbours.add(coords);
-        }
-
-        if (i + 1 <= Board.BOARD_SIZE - 1 && j - 1 >= 0 && Board.board[i + 1][j - 1] == player && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j - 1)))) {
-            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j - 1));
-            neighbours.add(coords);
-        }
-
-        if (j + 1 <= Board.BOARD_SIZE - 1 && Board.board[i][j + 1] == player && !visited.contains(new ArrayList<>(Arrays.asList(i, j + 1)))) {
+        if (j + 1 <= 10 && Board.board[i][j + 1] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i, j + 1)))) {
             ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i, j + 1));
             neighbours.add(coords);
         }
 
-        if (j - 1 >= 0 && Board.board[i][j - 1] == player && !visited.contains(new ArrayList<>(Arrays.asList(i, j - 1)))) {
-            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i, j - 1));
+        if (j + 1 <= 10 && i - 1 >= 0 && Board.board[i - 1][j + 1] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j + 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i - 1, j + 1));
             neighbours.add(coords);
         }
 
-        if (i - 1 >= 0 && Board.board[i - 1][j] == player && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j)))) {
+        if (i + 1 <= 10 && Board.board[i + 1][j] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j));
+            neighbours.add(coords);
+        }
+
+        if (i - 1 >= 0 && Board.board[i - 1][j] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j)))) {
             ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i - 1, j));
             neighbours.add(coords);
         }
 
-        if (i - 1 >= 0 && j + 1 <= Board.BOARD_SIZE - 1 && Board.board[i - 1][j + 1] == player && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j + 1)))) {
+        if (j - 1 >= 0 && i + 1 <= 10 && Board.board[i + 1][j - 1] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j - 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j - 1));
+            neighbours.add(coords);
+        }
+
+        if (j - 1 >= 0 && Board.board[i][j - 1] == Board.RED && !visited.contains(new ArrayList<>(Arrays.asList(i, j - 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i, j - 1));
+            neighbours.add(coords);
+        }
+
+        return neighbours;
+    }
+
+    /**
+     * Finds the blue neighbours of the hexagon.
+     *
+     * @param i - i coord of the current hexagon
+     * @param j - j coord of the current hexagon
+     * @param visited - the set of hexagons that were already visited
+     * @return - a set containing lists of the coords of the blue neighbours that were not already visited
+     */
+    public static LinkedHashSet<ArrayList<Integer>> blueSetNeighbours(int i, int j, LinkedHashSet<ArrayList<Integer>> visited) {
+
+        LinkedHashSet<ArrayList<Integer>> neighbours = new LinkedHashSet<>();
+
+        if (i + 1 <= 10 && Board.board[i + 1][j] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j));
+            neighbours.add(coords);
+        }
+
+        if (i + 1 <= 10 && j - 1 >= 0 && Board.board[i + 1][j - 1] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i + 1, j - 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i + 1, j - 1));
+            neighbours.add(coords);
+        }
+
+        if (j + 1 <= 10 && Board.board[i][j + 1] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i, j + 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i, j + 1));
+            neighbours.add(coords);
+        }
+
+        if (j - 1 >= 0 && Board.board[i][j - 1] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i, j - 1)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i, j - 1));
+            neighbours.add(coords);
+        }
+
+        if (i - 1 >= 0 && Board.board[i - 1][j] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j)))) {
+            ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i - 1, j));
+            neighbours.add(coords);
+        }
+
+        if (i - 1 >= 0 && j + 1 <= 10 && Board.board[i - 1][j + 1] == Board.BLUE && !visited.contains(new ArrayList<>(Arrays.asList(i - 1, j + 1)))) {
             ArrayList<Integer> coords = new ArrayList<>(Arrays.asList(i - 1, j + 1));
             neighbours.add(coords);
         }

@@ -17,7 +17,7 @@ public class Networking {
     /**
      * Port number needs to be between 1025-65535.
      */
-    static int portNumber = 6000;
+    static int portNumber = 5273;
 
     public static void connect() {
 
