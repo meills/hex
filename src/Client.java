@@ -60,67 +60,109 @@ public class Client {
 
                 if (in.readLine().equals(Config.ACCEPT)) {
                     System.out.println(Config.SERVER + Config.ACCEPT);
-                }
 
-                /**
-                 * Initialises a new game.
-                 */
-                Game.initGame();
-                Board.printBoard();
+                    /**
+                     * Initialises a new game.
+                     */
+                    Game.initGame();
+                    Board.printBoard();
 
-                Random rand = new Random();
+                    Random rand = new Random();
 
-                String serverMove;
+                    String serverMove;
 
-                int start = rand.nextInt(2);
+                    /**
+                     * Randomly chooses whether the client or the server starts.
+                     */
+                    int start = rand.nextInt(2);
 
-                if (start == 0) {
-                    Game.playTurn();
-                    out.println(Game.currentCoord);
+                    /**
+                     * If start is 0, the client starts.
+                     * This only has to be done on the first round.
+                     */
+                    if (start == 0) {
 
-                    if (Game.currentCoord.equals(Config.QUIT)) {
-                        Game.gameComplete = true;
+                        /**
+                         * If the client plays as an AI.
+                         */
+                        if (Game.aiGame) {
+                            Game.aiTurn = true;
+                            AI.setBlue();
+                        }
+
+                        /**
+                         * Plays the client's move and prints the updated board.
+                         */
+                        Game.playTurn();
+                        out.println(Game.currentCoord);
+
+                        /**
+                         * If the client quits.
+                         */
+                        if (Game.currentCoord.equals(Config.QUIT)) {
+                            Game.gameComplete = true;
+                        }
+
+                        if (!Game.gameComplete) {
+                            Board.printBoard();
+                        }
                     }
 
-                    if (!Game.gameComplete) {
+                    /**
+                     * If the server plays first.
+                     */
+                    else {
+                        System.out.println(Config.CLIENT + Config.PASS);
+                        out.println(Config.PASS);
+                    }
+
+                    while (!Game.gameComplete) {
+                        serverMove = in.readLine();
+                        System.out.println(Config.SERVER + serverMove);
+
+                        /**
+                         * If the server wants to quit or the client has won, the game is completed.
+                         */
+                        if (serverMove.equals(Config.QUIT) || serverMove.equals(Config.WIN_MESSAGE)) {
+                            Game.gameComplete = true;
+                            break;
+                        }
+
+                        /**
+                         * Plays the server's move and prints the updated board.
+                         */
+                        Game.playTurn(serverMove);
                         Board.printBoard();
-                    }
-                } else {
-                    System.out.println(Config.CLIENT + Config.PASS);
-                    out.println(Config.PASS);
-                }
 
-                while (!Game.gameComplete) {
-                    serverMove = in.readLine();
-                    System.out.println(Config.SERVER + serverMove);
+                        if (Game.gameComplete) {
+                            System.out.println(Config.LOSE_MESSAGE);
+                            out.println(Config.WIN_MESSAGE);
+                            Game.gameComplete = true;
+                            break;
+                        }
 
-                    if (serverMove.equals(Config.QUIT) || serverMove.equals(Config.WIN_MESSAGE)) {
-                        Game.gameComplete = true;
-                        break;
-                    }
+                        /**
+                         * Plays the client's move and prints the updated board.
+                         */
+                        Game.playTurn();
+                        out.println(Game.currentCoord);
 
-                    Game.playTurn(serverMove);
-                    Board.printBoard();
+                        /**
+                         * If the client wants to quit.
+                         */
+                        if (Game.currentCoord.equals(Config.QUIT)) {
+                            Game.gameComplete = true;
+                            break;
+                        }
 
-                    if (Game.gameComplete) {
-                        System.out.println(Config.LOSE_MESSAGE);
-                        out.println(Config.WIN_MESSAGE);
-                        Game.gameComplete = true;
-                        break;
-                    }
+                        /**
+                         * Only prints the board if the client did not quit.
+                         */
+                        Board.printBoard();
 
-                    Game.playTurn();
-                    out.println(Game.currentCoord);
-
-                    if (Game.currentCoord.equals(Config.QUIT)) {
-                        Game.gameComplete = true;
-                        break;
-                    }
-
-                    Board.printBoard();
-
-                    if (Game.gameComplete) {
-                        System.out.println(Config.SERVER + in.readLine());
+                        if (Game.gameComplete) {
+                            System.out.println(Config.SERVER + in.readLine());
+                        }
                     }
                 }
             }

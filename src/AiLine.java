@@ -3,109 +3,87 @@ import java.util.*;
 /**
  * A game mode where a human player plays against an AI that tries to complete a line across the board.
  */
-public class AiLine extends AiMode{
-    public static HashSet<int[]> line;
+public class AiLine {
 
     /**
-     * This method overrides AiMode's initGame() method.
-     * Coordinates of a line across the board is generated as a guideline for the AI.
-     * @Override
+     * Stores the colour of the AI.
+     * True for blue, false for red.
      */
-    public static void initGame() {
-        AiMode.initGame();
+    public static boolean bluePlayer = false;
+
+    public static HashSet<int[]> line;
+
+    public static void setLine() {
         Random rand = new Random();
         int[] coords;
-        int row;
-
-        Board.initBoard();
         line = new HashSet<>();
-        row = rand.nextInt(Board.BOARD_SIZE);
+        int x = rand.nextInt(Board.BOARD_SIZE);
 
         /**
          * Generates a random line.
          */
         for (int i = 0; i < Board.BOARD_SIZE; i++) {
             coords = new int[2];
-            coords[0] = row;
-            coords[1] = i;
+
+            /**
+             * the AI can be either red or blue.
+             */
+            if (bluePlayer) {
+                coords[0] = i;
+                coords[1] = x;
+            }
+
+            else {
+                coords[0] = x;
+                coords[1] = i;
+            }
+
             line.add(coords);
         }
     }
 
-    /**
-     * Runs player vs random ai mode.
-     */
-    public static void runGame() {
-
-        System.out.println("Player vs AI mode selected!");
-        System.out.println();
-
-        while (!gameComplete) {
-            if (humanTurn) {
-                humanMove();
-            } else {
-                aiMove();
-            }
-
-            gameComplete = Validator.validateWin();
-        }
-    }
-
-    /**
-     * Signals human move and updates board accordingly.
-     */
-    public static void humanMove() {
-        /**
-         * Signals human move and updates board accordingly.
-         */
-
-        Scanner input = new Scanner(System.in);
-        int[] move;
-
-        while (humanTurn) {
-            System.out.println("Your turn.");
-            Board.printBoard();
-            System.out.println("Make your move (enter hex coordinates):");
-
-            move = Game.parseCoor(input.nextLine());
-
-
-            if (move[0] == -1) {
-                System.out.println(Config.INVALID_MOVE);
-                System.out.println();
-                break;
-            }
-
-            System.out.println();
-            Board.updateBoardLine(move);
-        }
-    }
-
-    /**
-     * Carry out AI's move and updates board accordingly.
-     */
-    public static void aiMove() {
-        System.out.println(Config.AI_MOVE);
-        System.out.println();
+    public static String makeMove() {
 
         Random rand = new Random();
-        int index;
+        int index = rand.nextInt(line.size());
 
-        index = rand.nextInt(line.size());
+        int[] coords = ((int[]) Arrays.asList(line.toArray()).get(index));
+
+        // System.out.println("before move check: ");
+        // for (int[] hex: line) {
+        //     System.out.print(hex[0] + "," + hex[1] + "   ");
+        // }
+
+        if (Game.coordIndices != null) {
+            aiMoveCheck(Game.coordIndices);
+        }
+
+        // System.out.println("\nbefore remove coord: ");
+        // for (int[] hex: line) {
+        //     System.out.print(hex[0] + "," + hex[1] + "   ");
+        // }
+
+        removeCoord(coords);
+
+        // System.out.println("\nafter remove coord: ");
+        // for (int[] hex: line) {
+        //     System.out.print(hex[0] + "," + hex[1] + "   ");
+        // }
+
         //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
         //System.out.println(line.get(index)[0] + " " + line.get(index)[1]);
-        Board.updateBoardLine((int[]) Arrays.asList(line.toArray()).get(index));
+
+        return ("(" + coords[0] + "," + coords[1] + ");");
     }
 
     /**
      * Checks if generated line coordinates are used by human player and modifies line move accordingly.
-     * @param move - human player's move
+     * @param move - the indices of the current coordinate
      */
     public static void aiMoveCheck(int[] move) {
-        List<Object> altMoves = new ArrayList<>();
+        LinkedHashSet<ArrayList<Integer>> altMoves = new LinkedHashSet<>();
 
-        System.out.println("human move: " + move[0] + " " + move[1]);
-        debugLine();
+        // debugLine();
 
         Iterator<int[]> it = line.iterator();
         while (it.hasNext()) {
@@ -113,107 +91,39 @@ public class AiLine extends AiMode{
 
             if (coords[0] == move[0] && coords[1] == move[1]) {
                 it.remove();
-                altMoves = genAltMoves(move);
+
+                /**
+                 * Gets the free neighbours of the hexagon.
+                 */
+                altMoves = Validator.getNeighbours(Board.FREE, move[0], move[1], new LinkedHashSet<>());
             }
         }
 
+        /**
+         * Checks for repeats and removes them.
+         */
+        for (ArrayList<Integer> neighbour: altMoves) {
 
+            it = line.iterator();
 
-        it = line.iterator();
+            while (it.hasNext()) {
 
-        // checks for any repeats and removes them
-        while (it.hasNext()) {
-            int[] lineCoords = it.next();
-            int[] altCoords;
+                int [] hexagon =  it.next();
 
-            for (Object altMove: altMoves) {
-                altCoords = (int[]) altMove;
-                if (altCoords[0] == lineCoords[0] && altCoords[1] == lineCoords[1]) {
+                if (neighbour.get(0) == hexagon[0] && neighbour.get(1) == hexagon[1]) {
                     it.remove();
                 }
             }
         }
 
-        for (Object altMove: altMoves) {
-            int[] altCoords = (int[]) altMove;
+        for (ArrayList<Integer> neighbour: altMoves) {
+            int[] altCoords = new int[2];
+            altCoords[0] = neighbour.get(0);
+            altCoords[1] = neighbour.get(1);
             line.add(altCoords);
         }
 
-
-        debugLine();
-    }
-
-    /**
-     * Adds alternate coordinates when one of the line's tiles are occupied by the opponent.
-     * @param move - human player's move
-     * @return - List of alternate moves
-     */
-    public static List<Object> genAltMoves(int[] move) {
-        HashSet<int[]> neighbours = new HashSet<>();
-        int[] neighbour;
-
-        if (move[0] > 0) {
-            neighbour = new int[2];
-            neighbour[0] = move[0] - 1;
-            neighbour[1] =  move[1];
-
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-
-        if (move[0] > 0 && move[1] < Board.BOARD_SIZE -1) {
-            neighbour = new int[2];
-            neighbour[0] = move[0] - 1;
-            neighbour[1] =  move[1] + 1;
-            neighbours.add(neighbour);
-
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-
-        if (move[1] < Board.BOARD_SIZE - 1) {
-            neighbour = new int[2];
-            neighbour[0] = move[0];
-            neighbour[1] =  move[1] + 1;
-            neighbours.add(neighbour);
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-
-        if (move[0] < Board.BOARD_SIZE - 1) {
-            neighbour = new int[2];
-            neighbour[0] = move[0] + 1;
-            neighbour[1] =  move[1];
-            neighbours.add(neighbour);
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-
-
-        if (move[0] < Board.BOARD_SIZE - 1 && move[1] > 0) {
-            neighbour = new int[2];
-            neighbour[0] = move[0] + 1;
-            neighbour[1] =  move[1] - 1;
-            neighbours.add(neighbour);
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-
-        if (move[1] > 0) {
-            neighbour = new int[2];
-            neighbour[0] = move[0];
-            neighbour[1] =  move[1] - 1;
-            neighbours.add(neighbour);
-            if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
-                neighbours.add(neighbour);
-            }
-        }
-        return (List<Object>) Arrays.asList(neighbours.toArray());
+        // debugLine();
     }
 
     /**

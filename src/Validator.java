@@ -27,13 +27,15 @@ public abstract class Validator {
                 /**
                  * Keeps checking until a path is found or until the first column is finished.
                  */
-                for (int i = 0; i < Board.BOARD_SIZE; i++) {
+                for (int i = 0; i < Board.BOARD_SIZE && !gameComplete; i++) {
                     if (Board.board[i][0] == Board.RED) {
 
                         /**
                          * Used to check which hexagons were visited to avoid infinite loops.
                          */
                         LinkedHashSet<ArrayList<Integer>> visited = new LinkedHashSet<>();
+                        ArrayList<Integer> current = new ArrayList<>(Arrays.asList(i, 0));
+                        visited.add(current);
 
                         gameComplete = redConnectsToEdge(i, 0, visited);
                     }
@@ -55,13 +57,15 @@ public abstract class Validator {
                 /**
                  * Keeps checking until a path is found or until the first row is finished.
                  */
-                for (int j = 0; j < Board.BOARD_SIZE; j++) {
+                for (int j = 0; j < Board.BOARD_SIZE && !gameComplete; j++) {
                     if (Board.board[0][j] == Board.BLUE) {
 
                         /**
                          * Used to check which hexagons were visited to avoid infinite loops.
                          */
                         LinkedHashSet<ArrayList<Integer>> visited = new LinkedHashSet<>();
+                        ArrayList<Integer> current = new ArrayList<>(Arrays.asList(0, j));
+                        visited.add(current);
 
                         /**
                          * j and 0 are in the opposite order from the red player,
@@ -72,6 +76,8 @@ public abstract class Validator {
                 }
             }
         }
+
+        // System.out.println("Game complete: " + gameComplete);
 
         return gameComplete;
     }

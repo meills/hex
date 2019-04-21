@@ -13,7 +13,6 @@ public class Server {
     public static String hostName;
     public static int portNumber;
     public static BufferedReader in;
-    public static BufferedReader stdIn;
     public static PrintWriter out;
 
     /**
@@ -40,19 +39,34 @@ public class Server {
             clientSocket = serverSocket.accept();
             System.out.println(Config.CLIENT_FOUND);
 
+            /**
+             * Sets the output stream to send messages to the client.
+             */
             out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            stdIn = new BufferedReader(new InputStreamReader(System.in));
 
+            /**
+             * Sets the input stream to receive messages from the client.
+             */
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            /**
+             * Checks that the client uses the same protocol.
+             */
             if (in.readLine().equals(Config.GREETING)) {
                 System.out.println(Config.CLIENT + Config.GREETING);
                 out.println(Config.GREETING);
                 System.out.println(Config.SERVER + Config.GREETING);
 
+                /**
+                 * If the client requests a new game.
+                 */
                 if (in.readLine().equals(Config.GAME_REQUEST)) {
 
                     System.out.println(Config.CLIENT + Config.GAME_REQUEST);
 
+                    /**
+                     * Server accepts the game.
+                     */
                     out.println(Config.ACCEPT);
                     System.out.println(Config.SERVER + Config.ACCEPT);
 
@@ -68,14 +82,23 @@ public class Server {
                         clientMove = in.readLine();
                         System.out.println(Config.CLIENT + clientMove);
 
+                        /**
+                         * If the client sends a coordinate on the first round, the client starts.
+                         */
                         if (!clientMove.equals(Config.PASS)) {
 
+                            /**
+                             * If the client wants to quit or the server has won, the game is completed.
+                             */
                             if (clientMove.equals(Config.QUIT) || clientMove.equals(Config.WIN_MESSAGE)) {
                                 clientSocket.close();
                                 Game.gameComplete = true;
                                 break;
                             }
 
+                            /**
+                             * Plays the client's move and prints the updated board.
+                             */
                             Game.playTurn(clientMove);
                             Board.printBoard();
 
@@ -86,17 +109,35 @@ public class Server {
                                 Game.gameComplete = true;
                                 break;
                             }
+                        } else {
+
+                            /**
+                             * If the client doesn't start and the server is an AI, updates the value in the Game class.
+                             */
+                            if (Game.aiGame) {
+                                Game.aiTurn = true;
+                                AI.setBlue();
+                            }
                         }
 
+                        /**
+                         * Plays the server's move and prints the updated board.
+                         */
                         Game.playTurn();
                         out.println(Game.currentCoord);
 
+                        /**
+                         * If the server wants to quit.
+                         */
                         if (Game.currentCoord.equals(Config.QUIT)) {
                             clientSocket.close();
                             Game.gameComplete = true;
                             break;
                         }
 
+                        /**
+                         * Only prints the board if the server did not quit.
+                         */
                         Board.printBoard();
 
                         if (Game.gameComplete) {
