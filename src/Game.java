@@ -13,6 +13,8 @@ public class Game {
 
     public static boolean aiTurn = false;
 
+    public static boolean networkGame = false;
+
     /**
      * The blue player starts first by default.
      */
@@ -71,6 +73,8 @@ public class Game {
             Scanner input = new Scanner(System.in);
 
             while (blueTurn) {
+                System.out.print("Blue Player - ");
+
                 System.out.println(Config.MAKE_MOVE);
 
                 currentCoord = input.nextLine();
@@ -80,7 +84,11 @@ public class Game {
                     System.out.println();
                     Board.updateBoard(coordIndices);
                 } else {
-                    blueTurn = false;
+                    if (networkGame) {
+                        blueTurn = false;
+                    } else {
+                        System.out.println(Config.INVALID_MOVE);
+                    }
                 }
             }
 
@@ -128,6 +136,8 @@ public class Game {
             Scanner input = new Scanner(System.in);
 
             while (!blueTurn) {
+                System.out.print("Red Player - ");
+
                 System.out.println(Config.MAKE_MOVE);
 
                 currentCoord = input.nextLine(); // for printing in the server and client
@@ -137,7 +147,11 @@ public class Game {
                     System.out.println();
                     Board.updateBoard(coordIndices);
                 } else {
-                    blueTurn = true;
+                    if (networkGame) {
+                        blueTurn = true;
+                    } else {
+                        System.out.println(Config.INVALID_MOVE);
+                    }
                 }
             }
 

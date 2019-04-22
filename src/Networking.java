@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Networking {
 
@@ -17,9 +18,20 @@ public class Networking {
     /**
      * Port number needs to be between 1025-65535.
      */
-    static int portNumber = 5273;
+    static int portNumber = 0;
 
     public static void connect() {
+
+        while (portNumber == 0) {
+            System.out.println("\nEnter port number (between 1025-65535):");
+            Scanner sc = new Scanner(System.in);
+            int number = sc.nextInt();
+            if (number < 1025 || number > 65535) {
+                System.out.println("\nInvalid port number!");
+            } else {
+                portNumber = number;
+            }
+        }
 
         /**
          * Used to find the user's IP address.

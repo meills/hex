@@ -1,6 +1,6 @@
 public abstract class Config {
 
-    public static final String MY_IP = "IP of my system is : ";
+    public static final String MY_IP = "\nIP of my system is : ";
     public static final String SERVER_NO = "1";
     public static final String CLIENT_NO = "2";
     public static final String CHOOSE_MESSAGE = "Type " + SERVER_NO + " for a server. Type " + CLIENT_NO +" for a client.";
@@ -27,7 +27,7 @@ public abstract class Config {
     public static final String SERVER_UNAVAILABLE = "There was no server available. Please enter to try again";
     public static final String LOST_CONNECTION = "\nLost connection with the server.";
 
-    public static final String MAKE_MOVE = "\nMake your move (enter hex coordinates):";
+    public static final String MAKE_MOVE = "Make your move (enter hex coordinates):";
     public static final String INVALID_MOVE = "\nInvalid input! Please enter coordinates in the format " +
             "\"(<number between 0 and " + (Board.BOARD_SIZE - 1) +">,<number between 0 and " + (Board.BOARD_SIZE - 1) + ">);\"";
     public static final String TILE_OCCUPIED = "\nInvalid move! Hex tile is already occupied.";

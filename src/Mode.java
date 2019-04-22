@@ -6,10 +6,10 @@ public class Mode {
 
     private static String mode;
 
-   /**
-    * Prompts for user's preferred game mode.
-    * String - number of preferred game mode.
-    */
+    /**
+     * Prompts for user's preferred game mode.
+     * String - number of preferred game mode.
+     */
     public static String requestModeLocal() {
         boolean validMode = false;
 
@@ -98,5 +98,100 @@ public class Mode {
         }
 
         return mode;
+    }
+
+    public static void playLocalMode(String mode) {
+        switch (mode) {
+
+            case "1": {
+                Game.initGame();
+                Board.printBoard();
+
+                playGame();
+
+                break;
+            }
+
+            case "2": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                Game.initGame();
+                Board.printBoard();
+
+                playGame();
+
+                break;
+            }
+
+            case "3": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                AiLine.setLine();
+                Game.initGame();
+                Board.printBoard();
+
+                playGame();
+
+                break;
+            }
+
+            case "4": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                AiLineImproved.setLine();
+                Game.initGame();
+                Board.printBoard();
+
+                playGame();
+            }
+        }
+    }
+
+    private static void playGame() {
+        while (!Game.gameComplete) {
+            Game.playTurn();
+            Board.printBoard();
+        }
+
+        if (Game.blueTurn) {
+            System.out.println("Red wins!");
+        } else {
+            System.out.println("Blue wins!");
+        }
+    }
+
+    public static void playNetworkMode(String mode) {
+
+        Game.networkGame = true;
+
+        switch (mode) {
+
+            case "1": {
+                Networking.connect();
+                break;
+            }
+
+            case "2": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                Networking.connect();
+                break;
+            }
+
+            case "3": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                AiLine.setLine();
+                Networking.connect();
+                break;
+            }
+
+            case "4": {
+                AI.mode = mode;
+                Game.aiGame = true;
+                AiLineImproved.setLine();
+                Networking.connect();
+            }
+        }
     }
 }

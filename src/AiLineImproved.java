@@ -1,7 +1,7 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * AI that tries to create a jagged line across the board
@@ -41,8 +41,6 @@ public class AiLineImproved extends AI {
 
         aiMoveCheck(testMove);
     }*/
-
-
     public static void setLine() {
         Random rand = new Random();
         opponentThreat = false;
@@ -53,7 +51,7 @@ public class AiLineImproved extends AI {
 
         line = new HashSet<>();
 
-        x = Board.BOARD_SIZE/2 + rand.nextInt(Board.BOARD_SIZE/2);
+        x = Board.BOARD_SIZE / 2 + rand.nextInt(Board.BOARD_SIZE / 2);
 
         /**
          * Generates a random jagged line.
@@ -71,9 +69,7 @@ public class AiLineImproved extends AI {
             if (bluePlayer) {
                 coords[0] = i;
                 coords[1] = x;
-            }
-
-            else {
+            } else {
                 coords[0] = x;
                 coords[1] = i;
             }
@@ -112,7 +108,6 @@ public class AiLineImproved extends AI {
         }
 
 
-
         removeCoord(coords);
 
         //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
@@ -122,6 +117,7 @@ public class AiLineImproved extends AI {
 
     /**
      * Checks if generated line coordinates are used by human player and modifies line move accordingly.
+     *
      * @param move - the indices of the current coordinate
      */
     public static void aiMoveCheck(int[] move) {
@@ -167,17 +163,17 @@ public class AiLineImproved extends AI {
         if (move[0] > 0) {
             neighbour = new int[2];
             neighbour[0] = move[0] - 1;
-            neighbour[1] =  move[1];
+            neighbour[1] = move[1];
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
             }
         }
 
-        if (move[0] > 0 && move[1] < Board.BOARD_SIZE -1) {
+        if (move[0] > 0 && move[1] < Board.BOARD_SIZE - 1) {
             neighbour = new int[2];
             neighbour[0] = move[0] - 1;
-            neighbour[1] =  move[1] + 1;
+            neighbour[1] = move[1] + 1;
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
@@ -187,7 +183,7 @@ public class AiLineImproved extends AI {
         if (move[1] < Board.BOARD_SIZE - 1) {
             neighbour = new int[2];
             neighbour[0] = move[0];
-            neighbour[1] =  move[1] + 1;
+            neighbour[1] = move[1] + 1;
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
@@ -197,7 +193,7 @@ public class AiLineImproved extends AI {
         if (move[0] < Board.BOARD_SIZE - 1) {
             neighbour = new int[2];
             neighbour[0] = move[0] + 1;
-            neighbour[1] =  move[1];
+            neighbour[1] = move[1];
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
@@ -208,7 +204,7 @@ public class AiLineImproved extends AI {
         if (move[0] < Board.BOARD_SIZE - 1 && move[1] > 0) {
             neighbour = new int[2];
             neighbour[0] = move[0] + 1;
-            neighbour[1] =  move[1] - 1;
+            neighbour[1] = move[1] - 1;
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
@@ -218,7 +214,7 @@ public class AiLineImproved extends AI {
         if (move[1] > 0) {
             neighbour = new int[2];
             neighbour[0] = move[0];
-            neighbour[1] =  move[1] - 1;
+            neighbour[1] = move[1] - 1;
 
             if (Board.board[neighbour[0]][neighbour[1]] == Board.FREE) {
                 neighbours.add(neighbour);
@@ -229,13 +225,13 @@ public class AiLineImproved extends AI {
 
         // for debugging
         System.out.print("neighbours:");
-        for (int[] set: neighbours) {
+        for (int[] set : neighbours) {
             System.out.print("(" + set[0] + " " + set[1] + ") ");
         }
         System.out.println();
 
 
-        for (int[] n: neighbours) {
+        for (int[] n : neighbours) {
             if (lineContains(n[0], n[1] - 1) && lineContains(n[0] - 1, n[1] + 1)) {
                 //System.out.println("adj present");
                 altMove[0] = n[0]++;
@@ -260,7 +256,7 @@ public class AiLineImproved extends AI {
     public static void debugLine() {
         System.out.print("line coords: ");
 
-        for (int[] coords: line) {
+        for (int[] coords : line) {
             System.out.print("(" + coords[0] + ", " + coords[1] + ") ");
         }
         System.out.println();
@@ -269,6 +265,7 @@ public class AiLineImproved extends AI {
 
     /**
      * A method that checks if the line set contains coordinates.
+     *
      * @param x - row coordinate
      * @param y - column coordinate
      * @return -  if line set contains coordinates
@@ -290,6 +287,7 @@ public class AiLineImproved extends AI {
 
     /**
      * Removes coordinate from line set.
+     *
      * @param move
      */
     public static void removeCoord(int[] move) {
