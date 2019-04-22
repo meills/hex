@@ -6,13 +6,12 @@ public class Hex {
 
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\nWelcome to Hex!\n");
-        System.out.println("Enter 1 for local game, 2 for network.");
+        System.out.println(Config.MODE);
 
         String input = sc.nextLine();
 
         while (!input.equals("1") && !input.equals("2")) {
-            System.out.println("Invalid input. Enter 1 for local game, 2 for network. Please re-enter choice.");
+            System.out.println(Config.INVALID_MODE);
             input = sc.nextLine();
         }
 

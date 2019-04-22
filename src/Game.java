@@ -73,7 +73,7 @@ public class Game {
             Scanner input = new Scanner(System.in);
 
             while (blueTurn) {
-                System.out.print("Blue Player - ");
+                System.out.print(Config.BLUE);
 
                 System.out.println(Config.MAKE_MOVE);
 
@@ -98,12 +98,7 @@ public class Game {
         } else {
 
             while (blueTurn) {
-                System.out.println("AI's move: ");
-                currentCoord = AI.getCoords();
-                coordIndices = parseCoor(currentCoord);
-                System.out.println(currentCoord);
-                System.out.println();
-                Board.updateBoard(coordIndices);
+                aiMove();
             }
 
             aiTurn = false;
@@ -116,15 +111,7 @@ public class Game {
      * @param position - the opponent's position
      */
     public static void blueMove(String position) {
-
-        currentCoord = position;
-        coordIndices = parseCoor(currentCoord);
-        System.out.println();
-        Board.updateBoard(coordIndices);
-
-        if (aiGame) {
-            aiTurn = true;
-        }
+        opponentMove(position);
     }
 
     /**
@@ -136,7 +123,7 @@ public class Game {
             Scanner input = new Scanner(System.in);
 
             while (!blueTurn) {
-                System.out.print("Red Player - ");
+                System.out.print(Config.RED);
 
                 System.out.println(Config.MAKE_MOVE);
 
@@ -161,12 +148,7 @@ public class Game {
         } else {
 
             while (!blueTurn) {
-                System.out.println("AI's move: ");
-                currentCoord = AI.getCoords();
-                System.out.println(currentCoord);
-                coordIndices = parseCoor(currentCoord);
-                System.out.println();
-                Board.updateBoard(coordIndices);
+                aiMove();
             }
 
             aiTurn = false;
@@ -179,8 +161,14 @@ public class Game {
      * @param position - the opponent's position
      */
     public static void redMove(String position) {
+        opponentMove(position);
+    }
 
-        currentCoord = position; // for printing in the server and client
+    /**
+     * The move made by the opponent.
+     */
+    private static void opponentMove(String position) {
+        currentCoord = position;
         coordIndices = parseCoor(currentCoord);
         System.out.println();
         Board.updateBoard(coordIndices);
@@ -188,6 +176,18 @@ public class Game {
         if (aiGame) {
             aiTurn = true;
         }
+    }
+
+    /**
+     * The move made by the AI player.
+     */
+    public static void aiMove() {
+        System.out.println(Config.AI_MOVE);
+        currentCoord = AI.getCoords();
+        System.out.println(currentCoord);
+        coordIndices = parseCoor(currentCoord);
+        System.out.println();
+        Board.updateBoard(coordIndices);
     }
 
     /**
