@@ -71,6 +71,7 @@ public class Game {
             Scanner input = new Scanner(System.in);
 
             while (blueTurn) {
+
                 System.out.println(Config.MAKE_MOVE);
 
                 currentCoord = input.nextLine();
