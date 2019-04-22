@@ -17,7 +17,8 @@ public class AiLine {
         Random rand = new Random();
         int[] coords;
         line = new HashSet<>();
-        int x = rand.nextInt(Board.BOARD_SIZE);
+
+        int x = 1  + rand.nextInt(Board.BOARD_SIZE - 2);
 
         /**
          * Generates a random line.
@@ -47,6 +48,12 @@ public class AiLine {
         Random rand = new Random();
         int index = rand.nextInt(line.size());
 
+
+        if (Game.coordIndices != null) {
+            aiMoveCheck(Game.coordIndices);
+        }
+
+
         int[] coords = ((int[]) Arrays.asList(line.toArray()).get(index));
 
         // System.out.println("before move check: ");
@@ -54,9 +61,6 @@ public class AiLine {
         //     System.out.print(hex[0] + "," + hex[1] + "   ");
         // }
 
-        if (Game.coordIndices != null) {
-            aiMoveCheck(Game.coordIndices);
-        }
 
         // System.out.println("\nbefore remove coord: ");
         // for (int[] hex: line) {

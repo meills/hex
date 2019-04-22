@@ -32,12 +32,15 @@ public class AiLineImproved extends AI {
         opponentThreat = false;
         int[] coords;
         int x;
+        int y;
 
         boolean changeRow = false;
 
         line = new HashSet<>();
 
         x = Board.BOARD_SIZE/2 + rand.nextInt(Board.BOARD_SIZE/2);
+        y = Board.BOARD_SIZE/2 + rand.nextInt(Board.BOARD_SIZE/2);
+
 
         /**
          * Generates a random jagged line.
@@ -46,7 +49,7 @@ public class AiLineImproved extends AI {
             coords = new int[2];
 
             if (changeRow) {
-                x -=1;
+                x--;
             }
 
             /**
@@ -76,6 +79,7 @@ public class AiLineImproved extends AI {
     public static String makeMove() {
         int[] coords;
 
+        System.out.println(opponentThreat);
         if (opponentThreat) {
             coords = moveAgainstOpp;
         } else {
