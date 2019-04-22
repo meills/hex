@@ -12,7 +12,7 @@ public class Hex {
         String input = sc.nextLine();
 
         while (!input.equals("1") && !input.equals("2")) {
-            System.out.println("Invalid input. Enter 1 for local game, 2 for network.");
+            System.out.println("Invalid input. Enter 1 for local game, 2 for network. Please re-enter choice.");
             input = sc.nextLine();
         }
 
