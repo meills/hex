@@ -102,7 +102,7 @@ public class AiLineImproved extends AI {
         debugLine();
 
         //System.out.println(opponentThreat);
-        if (opponentThreat) {
+        if (opponentThreat && moveAgainstOpp[0] != -1) {
             coords = moveAgainstOpp;
         } else {
             Random rand = new Random();
