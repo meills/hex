@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -22,9 +25,22 @@ public class AiLineImproved extends AI {
     /**
      * Main method used for debugging.
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) throws IOException{
+        Board.initBoard();
         setLine();
-    }
+
+        debugLine();
+        int[] testMove = new int[2];
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        testMove[0] = Integer.parseInt(br.readLine());
+
+        br = new BufferedReader(new InputStreamReader(System.in));
+        testMove[1] =  Integer.parseInt(br.readLine());
+
+        aiMoveCheck(testMove);
+    }*/
 
 
     public static void setLine() {
@@ -32,15 +48,12 @@ public class AiLineImproved extends AI {
         opponentThreat = false;
         int[] coords;
         int x;
-        int y;
 
         boolean changeRow = false;
 
         line = new HashSet<>();
 
         x = Board.BOARD_SIZE/2 + rand.nextInt(Board.BOARD_SIZE/2);
-        y = Board.BOARD_SIZE/2 + rand.nextInt(Board.BOARD_SIZE/2);
-
 
         /**
          * Generates a random jagged line.
@@ -79,7 +92,16 @@ public class AiLineImproved extends AI {
     public static String makeMove() {
         int[] coords;
 
-        System.out.println(opponentThreat);
+        debugLine();
+
+        //System.out.println(Game.coordIndices);
+        if (Game.coordIndices != null) {
+            aiMoveCheck(Game.coordIndices);
+        }
+
+        debugLine();
+
+        //System.out.println(opponentThreat);
         if (opponentThreat) {
             coords = moveAgainstOpp;
         } else {
@@ -89,9 +111,7 @@ public class AiLineImproved extends AI {
             coords = ((int[]) Arrays.asList(line.toArray()).get(index));
         }
 
-        if (Game.coordIndices != null) {
-            aiMoveCheck(Game.coordIndices);
-        }
+
 
         removeCoord(coords);
 
@@ -105,21 +125,17 @@ public class AiLineImproved extends AI {
      * @param move - the indices of the current coordinate
      */
     public static void aiMoveCheck(int[] move) {
-        int[] altMove = new int[2];
-        
-        Iterator<int[]> it = line.iterator();
-        while (it.hasNext()) {
-            int[] coords = it.next();
+        int[] altMove = {-1, -1};
+        opponentThreat = false;
 
-            if (coords[0] == move[0] && coords[1] == move[1]) {
-                it.remove();
-                altMove = genAltMove(move);
-                moveAgainstOpp = altMove;
-                opponentThreat = true;
-            } else {
-                opponentThreat = false;
-            }
+        if (lineContains(move[0], move[1])) {
+            removeCoord(move);
+            altMove = genAltMove(move);
+            System.out.println("alt move: " + altMove[0] + ", " + altMove[1]);
+            moveAgainstOpp = altMove;
+            opponentThreat = true;
         }
+
 
         /*it = line.iterator();
         // checks for any repeats and removes them
@@ -131,8 +147,9 @@ public class AiLineImproved extends AI {
                 it.remove();
             }
         }*/
-
-        line.add(altMove);
+        if (altMove[0] != -1 && altMove[1] != -1) {
+            line.add(altMove);
+        }
     }
 
 
@@ -208,18 +225,34 @@ public class AiLineImproved extends AI {
             }
         }
 
+        System.out.println("move: " + move[0] + ", " + move[1]);
+
+        // for debugging
+        System.out.print("neighbours:");
+        for (int[] set: neighbours) {
+            System.out.print("(" + set[0] + " " + set[1] + ") ");
+        }
+        System.out.println();
+
+
         for (int[] n: neighbours) {
-            if(lineContains(n[0], n[1] - 1) && lineContains(n[0] - 1, n[1] + 1)) {
-                altMove[0] = n[0] + 1;
+            if (lineContains(n[0], n[1] - 1) && lineContains(n[0] - 1, n[1] + 1)) {
+                //System.out.println("adj present");
+                altMove[0] = n[0]++;
                 altMove[1] = n[1];
+                break;
+            } else if (lineContains(n[0] + 1, n[1] - 1) && lineContains(n[0], n[1] + 1)) {
+                //System.out.println("adj present");
+                altMove[0] = n[0]--;
+                altMove[1] = n[1];
+                break;
+            } else {
+                line.add(n);
             }
 
-            if(lineContains(n[0] + 1, n[1] - 1) && lineContains(n[0], n[1] + 1)) {
-                altMove[0] = n[0] - 1;
-                altMove[1] = n[1];
-            }
         }
 
+        //System.out.println("alt move: " + altMove[0] + ", " + altMove[1]);
         return altMove;
     }
 
@@ -246,6 +279,8 @@ public class AiLineImproved extends AI {
 
         while (it.hasNext()) {
             lineCoor = it.next();
+            //System.out.println("line coor: " + lineCoor[0] + ", " + lineCoor[1]);
+            //System.out.println("move: " + x + ". " + y);
             if (lineCoor[0] == x && lineCoor[1] == y) {
                 return true;
             }
