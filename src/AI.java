@@ -35,4 +35,19 @@ public class AI {
             }
         }
     }
+
+    public static void setRed() {
+        switch (mode) {
+            case "3": {
+                AiLine.bluePlayer = false;
+                AiLine.setLine();
+                break;
+            }
+
+            case "4": {
+                AiLineImproved.bluePlayer = false;
+                AiLineImproved.setLine();
+            }
+        }
+    }
 }

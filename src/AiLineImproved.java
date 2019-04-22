@@ -85,6 +85,10 @@ public class AiLineImproved extends AI {
             coords = ((int[]) Arrays.asList(line.toArray()).get(index));
         }
 
+        if (Game.coordIndices != null) {
+            aiMoveCheck(Game.coordIndices);
+        }
+
         removeCoord(coords);
 
         //System.out.println("line array size: " + line.size() + "   chosen index: " + index);
@@ -98,7 +102,7 @@ public class AiLineImproved extends AI {
      */
     public static void aiMoveCheck(int[] move) {
         int[] altMove = new int[2];
-
+        
         Iterator<int[]> it = line.iterator();
         while (it.hasNext()) {
             int[] coords = it.next();
@@ -130,6 +134,7 @@ public class AiLineImproved extends AI {
 
     /**
      * Generates alternate move and signals program to make the alternate move next.
+     *
      * @param move
      * @return
      */
