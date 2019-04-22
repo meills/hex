@@ -109,7 +109,9 @@ public class Server {
                                 Game.gameComplete = true;
                                 break;
                             }
-                        } else {
+                        }
+
+                        if (clientMove.equals(Config.PASS)){
 
                             /**
                              * If the client doesn't start and the server is an AI, updates the value in the Game class.
@@ -158,6 +160,11 @@ public class Server {
                  * After a game is finished, the server is waiting for another client to play.
                  */
                 Game.gameComplete = false;
+
+                /**
+                 * To reinitialise the line.
+                 */
+                AI.setRed();
                 serverSocket.close();
                 connect();
             } catch (IOException e) {
