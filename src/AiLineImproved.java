@@ -92,14 +92,14 @@ public class AiLineImproved extends AI {
     public static String makeMove() {
         int[] coords;
 
-        debugLine();
+        //debugLine();
 
         //System.out.println(Game.coordIndices);
         if (Game.coordIndices != null) {
             aiMoveCheck(Game.coordIndices);
         }
 
-        debugLine();
+        //debugLine();
 
         //System.out.println(opponentThreat);
         if (opponentThreat && moveAgainstOpp[0] != -1) {
@@ -131,7 +131,7 @@ public class AiLineImproved extends AI {
         if (lineContains(move[0], move[1])) {
             removeCoord(move);
             altMove = genAltMove(move);
-            System.out.println("alt move: " + altMove[0] + ", " + altMove[1]);
+            //System.out.println("alt move: " + altMove[0] + ", " + altMove[1]);
             moveAgainstOpp = altMove;
             opponentThreat = true;
         }
@@ -225,7 +225,7 @@ public class AiLineImproved extends AI {
             }
         }
 
-        System.out.println("move: " + move[0] + ", " + move[1]);
+        //System.out.println("move: " + move[0] + ", " + move[1]);
 
         // for debugging
         System.out.print("neighbours:");
