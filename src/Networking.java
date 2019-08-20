@@ -1,10 +1,11 @@
-package network;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Scanner;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-public class Main {
+public class Networking {
 
     /**
      * A host is a computer that communicates with other hosts over the network.
@@ -12,9 +13,25 @@ public class Main {
      * The hostName is the computer used by the player.
      */
     static String hostName;
-    static int portNumber = 9898;
+    static String mode;
 
-    public static void main(String[] args) {
+    /**
+     * Port number needs to be between 1025-65535.
+     */
+    static int portNumber = 0;
+
+    public static void connect() {
+
+        while (portNumber == 0) {
+            System.out.println("\nEnter port number (between 1025-65535):");
+            Scanner sc = new Scanner(System.in);
+            int number = sc.nextInt();
+            if (number < 1025 || number > 65535) {
+                System.out.println("\nInvalid port number!");
+            } else {
+                portNumber = number;
+            }
+        }
 
         /**
          * Used to find the user's IP address.
@@ -28,9 +45,9 @@ public class Main {
             /**
              * Used by the user to see if they are the server or a client.
              */
-            System.out.println("IP of my system is := " + IP.getHostAddress());
+            System.out.println(Config.MY_IP + IP.getHostAddress());
 
-            hostName =IP.getHostAddress();
+            hostName = IP.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -40,17 +57,20 @@ public class Main {
         /**
          * Lets the user choose whether they are acting as a client or a server.
          */
-        System.out.println("Type 1 for a server. Type 2 for a client.");
+        System.out.println(Config.CHOOSE_MESSAGE);
         String str = "";
 
         try {
 
             str = stdIn.readLine();
 
-            while (!(str.equals("1") || str.equals("2"))) {
-                System.out.println("Try again");
+            while (!(str.equals(Config.SERVER_NO) || str.equals(Config.CLIENT_NO))) {
+                System.out.println(Config.TRY_MESSAGE);
                 str = stdIn.readLine();
-            }
+            } /**
+         * Runs game according to specified mode.
+         */
+
 
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -61,7 +81,7 @@ public class Main {
         /**
          * If the input string is "1", sets up the server.
          */
-        if (str.equals("1")) {
+        if (str.equals(Config.SERVER_NO)) {
             Server server = new Server(hostName, portNumber);
             server.communicate();
         }
@@ -75,11 +95,11 @@ public class Main {
              * Prompts the user to type in the IP address of the computer they are playing against.
              * In this case, the user is the client and the opponent is the server.
              */
-            System.out.println("Please type in the IP Address that you want to compete against.");
+            System.out.println(Config.ADDRESS_MESSAGE);
 
             try {
                 String ipAddress = getIPAddress();
-                Client client = new Client(ipAdress, portNumber);
+                Client client = new Client(ipAddress, portNumber);
                 client.communicate();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,7 +109,8 @@ public class Main {
 
     /**
      * Gets the IP address of the server (in the case that the player is a client).
-     * @return
+     *
+     * @return - the IP address
      */
     public static String getIPAddress() throws IOException {
 
@@ -108,7 +129,7 @@ public class Main {
              * Checks that all elements separated by "." are integers.
              * Otherwise, the input is not a valid IP address.
              */
-            for (String element: splitIP) {
+            for (String element : splitIP) {
                 try {
                     Integer.parseInt(element);
                 } catch (NumberFormatException e) {
@@ -123,7 +144,7 @@ public class Main {
          * If the IP address is not valid, prompts the user to enter another IP address.
          */
         if (!pass) {
-            System.out.println("Not a valid IP address. Try again");
+            System.out.println(Config.INVALID_ADDRESS);
             ipAddress = getIPAddress();
         }
 

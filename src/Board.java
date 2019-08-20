@@ -1,20 +1,23 @@
-import java.lang.reflect.Array;
-import java.util.*;
-
 public class Board {
-    private static final char FREE = '#';
-    private static final char RED = 'r';
-    private static final char BLUE = 'b';
 
-    private static final String OFFSET_ONE = " ";
-    private static final String OFFSET_TWO = "  ";
-    private static final String OFFSET_THREE = "   ";
+    /**
+     * To change the colour of the terminal output.
+     * <p>
+     * https://dev.to/awwsmm/coloured-terminal-output-with-java-57l3
+     */
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final char FREE = '⬢';
+    public static final char RED = 'r';
+    public static final char BLUE = 'b';
+    public static final int BOARD_SIZE = 11;
 
-    private static final int BOARD_SIZE = 5;
+    public static char[][] board;
 
-
-    private static char[][] board;
-
+    /**
+     * Initialises the board with all positions unoccupied.
+     */
     public static void initBoard() {
         board = new char[BOARD_SIZE][BOARD_SIZE];
 
@@ -34,191 +37,108 @@ public class Board {
     }*/
 
     /**
-     * Prints board
+     * Prints the current state of the board.
      */
     public static void printBoard() {
+
         System.out.println();
 
+        /**
+         * Prints the blue coordinates on top.
+         */
         for (int index = 0; index < BOARD_SIZE; index++) {
-            System.out.print(" " + index);
+            System.out.print(ANSI_BLUE + " " + index);
         }
-        System.out.println();
+        System.out.println(ANSI_RESET);
 
         for (int i = 0; i < BOARD_SIZE; i++) {
 
+            /**
+             * Prints the empty spaces at the beginning of each line.
+             */
             for (int space = 0; space < i; space++) {
                 if (space < 9) {
-                    System.out.print(OFFSET_ONE);
+                    System.out.print(" ");
                 }
             }
 
-            System.out.print(i + OFFSET_ONE);
+            /**
+             * Prints the red coordinates on the left.
+             */
+            System.out.print(ANSI_RED + i + " ");
+            System.out.print(ANSI_RESET);
 
+            /**
+             * Positions are stored as '⬢', 'r', 'b'.
+             * The board is printed as hexagons of different colours.
+             */
             for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(board[i][j] + OFFSET_ONE);
+
+                /**
+                 * Prints the red hexagons.
+                 */
+                if (board[i][j] == RED) {
+                    System.out.print(ANSI_RED + FREE + " ");
+                }
+
+                /**
+                 * Prints the blue hexagons.
+                 */
+                else if (board[i][j] == BLUE) {
+                    System.out.print(ANSI_BLUE + FREE + " ");
+                }
+
+                /**
+                 * Prints the empty spaces.
+                 */
+                else {
+                    System.out.print(ANSI_RESET + FREE + " ");
+                }
             }
 
-            System.out.println();
+            /**
+             * Prints the red coordinates on the right.
+             */
+            System.out.println(ANSI_RED + i);
         }
 
-        System.out.println();
+        /**
+         * Prints the empty spaces and the blue coordinates on the bottom.
+         */
+        System.out.print(String.format("%1$" + (BOARD_SIZE + 1) + "s", ""));
+        for (int index = 0; index < BOARD_SIZE; index++) {
+            System.out.print(ANSI_BLUE + " " + index);
+        }
+        System.out.println(ANSI_RESET + "\n");
     }
 
     /**
-     * Updates board according to specified coordinates.
+     * Updates the board based on the selected position.
      *
-     * @param coor - coordinates on hex board
+     * @param coor - the coordinates of the position
      */
     public static void updateBoard(int[] coor) {
-        if (board[coor[0]][coor[1]] == FREE) {
-            if (Game.blueTurn) {
-                board[coor[0]][coor[1]] = BLUE;
-                Game.blueTurn = false;
-            } else if (!Game.blueTurn) {
-                board[coor[0]][coor[1]] = RED;
-                Game.blueTurn = true;
-            }
-        } else {
-            System.out.println("Invalid move! Hex tile is already occupied.");
-        }
-    }
 
+        /**
+         * Checks that the coordinates are in range before updating the board.
+         */
+        if (coor[0] >= 0 && coor[0] < BOARD_SIZE && coor[1] >= 0 && coor[1] < BOARD_SIZE) {
 
-    /**
-     * Method checks if game is complete and returns a boolean value.
-     *
-     * @return - boolean value denoting if game is complete
-     */
-    public static boolean isGameComplete() {
-        boolean gameComplete = false;
-
-        ArrayList<int[]> blueCoor = new ArrayList<>();
-        ArrayList<int[]> redCoor = new ArrayList<>();
-        int[] adjCoor = new HashSet<int[]>;
-
-        // key - first coordinate in coordinate array
-        // value - array list of coordinates
-        HashMap<Integer, ArrayList<int[]>> rows;
-
-        int[] coor;
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                coor = new int[2];
-
-                switch (board[i][j]) {
-                    case 'b':
-                        coor[0] = i;
-                        coor[1] = j;
-                        blueCoor.add(coor);
-                        break;
-                    case 'r':
-                        coor[0] = i;
-                        coor[1] = j;
-                        redCoor.add(coor);
-                        break;
-                    default:
-                        break;
+            /**
+             * Checks that the position is free before updating the board.
+             * Updates the turn if the move is valid.
+             */
+            if (board[coor[0]][coor[1]] == FREE) {
+                if (Game.blueTurn) {
+                    board[coor[0]][coor[1]] = BLUE;
+                    Game.blueTurn = false;
+                } else {
+                    board[coor[0]][coor[1]] = RED;
+                    Game.blueTurn = true;
                 }
-            }
-        }
-
-
-        //checks for blue winning
-
-
-        rows = new HashMap<>();
-
-        for (int i = 0; i < board.length; i++) {
-            rows.put(i, new ArrayList<>());
-
-            for (int[] bc : blueCoor) {
-                if (bc[0] == i) {
-                    rows.get(i).add(bc);
-                }
-            }
-        }
-
-        for (int i = 0; i < board.length; i++) {
-            if (rows.get(i).size() != 0) {
-                for (int[] bc : rows.get(i)) {
-                    if (i > 0) {
-
-                    }
-                    adjCoor = genAdjCoor(bc, BLUE);
-                }
-
             } else {
-                gameComplete = false;
+                System.out.println(Config.TILE_OCCUPIED);
             }
         }
-
-
-        // statements for debugging
-        System.out.println("blue coords:");
-        for(int[] cor:blueCoor) {
-            System.out.println(cor[0] + " " + cor[1]);
-        }
-    }
-
-    /**
-     * Generates all coordinates of adjacent hex pieces.
-     * @param coor
-     * @return
-     */
-    public static int[] genAdjCoor(int[] coor, char c) {
-        HashSet<int[]> adjCoors = new HashSet<>();
-
-        int[] adjCoor = new int[2];
-        adjCoor[0] = -1;
-
-        if (coor[0] > 0 && board[coor[0] - 1][coor[1]] != FREE) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0] - 1;
-            adjCoor[1] =  coor[1];
-            adjCoors.add(adjCoor);
-        }
-
-        if (coor[0] > 0 && coor[1] < BOARD_SIZE -1) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0] - 1;
-            adjCoor[1] =  coor[1]+1;
-            adjCoors.add(adjCoor);
-        }
-
-        if (coor[1] < BOARD_SIZE - 1) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0];
-            adjCoor[1] =  coor[1] + 1;
-            adjCoors.add(adjCoor);
-        }
-
-        if (coor[0] < BOARD_SIZE - 1) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0] + 1;
-            adjCoor[1] =  coor[1];
-            adjCoors.add(adjCoor);
-        }
-
-
-        if (coor[0] < BOARD_SIZE - 1 && coor[1] > 0) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0] + 1;
-            adjCoor[1] =  coor[1] - 1;
-            adjCoors.add(adjCoor);
-        }
-
-        if (coor[1] > 0) {
-            adjCoor = new int[2];
-            adjCoor[0] = coor[0];
-            adjCoor[1] =  coor[1] - 1;
-            adjCoors.add(adjCoor);
-        }
-
-        return adjCoor;
-    }
-
-    public static void offsetBoard() {
-        System.out.print(OFFSET_THREE + OFFSET_THREE);
     }
 }
