@@ -19,3 +19,7 @@ Run the program as such:
 java Hex
 
 Follow the instructions printed to stdout
+
+
+## The Team 🚀
+Built with ❤ by [A.C.](https://github.com/AdrianaCucu) and [meills](https://github.com/meills)
